@@ -1,0 +1,12 @@
+@use '@styles' as *;
+
+.Link {
+	color: $accent_color;
+	font-size: 14px;
+	font-weight: 400;
+	transition: color 0.4s ease;
+
+	&:hover {
+		color: rgba($color: $accent_color, $alpha: 0.75);
+	}
+}
