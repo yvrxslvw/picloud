@@ -1,0 +1,21 @@
+@use '@styles' as *;
+
+.Button {
+	border: none;
+	outline: none;
+	background-color: initial;
+	cursor: pointer;
+
+	color: $white_color;
+	font-weight: 700;
+	font-size: 18px;
+	background-color: $accent_color;
+	padding: 10px 20px;
+	border-radius: 5px;
+	transition: background-color 0.4s ease;
+	width: 100%;
+
+	&:hover {
+		background-color: rgba($color: $accent_color, $alpha: 0.75);
+	}
+}
