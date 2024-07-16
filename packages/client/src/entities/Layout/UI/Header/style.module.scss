@@ -1,0 +1,15 @@
+@use '@styles' as *;
+
+.Header {
+	background-color: $accent_color;
+	padding: 20px 0px;
+
+	.HeaderRow {
+		@include container;
+
+		a {
+			text-decoration: none;
+			color: initial;
+		}
+	}
+}

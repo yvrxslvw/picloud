@@ -1,0 +1,10 @@
+@use '@styles' as *;
+
+.Footer {
+	background-color: $black_color;
+	padding: 15px 0px;
+
+	.FooterRow {
+		@include container;
+	}
+}

@@ -7,6 +7,7 @@
 	align-items: center;
 	user-select: none;
 	color: $white_color;
+	position: relative;
 
 	&.Dark {
 		color: $black_color;
