@@ -1,0 +1,25 @@
+@use '@styles' as *;
+
+.Window {
+	background-color: $light_gray_color;
+	min-width: 420px;
+	border-radius: 15px;
+	filter: drop-shadow(4px 4px 7px rgba($color: $black_color, $alpha: 0.25));
+
+	.WindowHeader {
+		background-color: $accent_color;
+		color: $white_color;
+		padding: 10px 0px;
+		border-radius: 15px 15px 0px 0px;
+
+		h2 {
+			font-size: 20px;
+			font-weight: 700;
+			text-align: center;
+		}
+	}
+
+	.WindowBody {
+		padding: 25px;
+	}
+}

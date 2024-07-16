@@ -10,10 +10,9 @@ interface LogoProps extends HTMLAttributes<HTMLDivElement> {
 export const Logo: FC<LogoProps> = ({ className, dark, ...props }) => {
 	return (
 		<div className={cn(cl.Logo, className, { [cl.Dark]: dark })} {...props}>
-			<p>PI</p>
+			<h1>PI&emsp;&ensp;Cloud</h1>
 			<img src={Images.cloud} alt='Cloud' className={cl.CloudImage} />
 			<img src={Images.chick} alt='Chick' className={cl.ChickImage} />
-			<p>Cloud</p>
 		</div>
 	);
 };

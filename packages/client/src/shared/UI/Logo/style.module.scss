@@ -1,16 +1,13 @@
 @use '@styles' as *;
 
 .Logo {
-	font-family: "Bubblegum Sans", sans-serif;
-	font-size: 24px;
+	font-family: 'Bubblegum Sans', sans-serif;
 	display: flex;
-	gap: 29px;
 	height: 60px;
 	align-items: center;
 	user-select: none;
-	text-transform: uppercase;
 	color: $white_color;
-	
+
 	&.Dark {
 		color: $black_color;
 	}
@@ -22,12 +19,17 @@
 
 		&.ChickImage {
 			top: 5px;
-			left: 18px;
+			left: 22px;
 		}
 
 		&.CloudImage {
 			top: 25px;
-			left: 18px;
+			left: 22px;
 		}
+	}
+
+	h1 {
+		font-size: 24px;
+		text-transform: uppercase;
 	}
 }
