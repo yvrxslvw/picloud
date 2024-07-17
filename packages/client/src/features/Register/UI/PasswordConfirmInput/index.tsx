@@ -15,7 +15,7 @@ export const PasswordConfirmInput: FC<PasswordConfirmInputProps> = ({ passwordCo
 	return (
 		<Input
 			label='Пароль'
-			placeholder='Придумайте пароль'
+			placeholder='Повторите придуманный пароль'
 			type='password'
 			value={passwordConfirm}
 			onChange={onChangeHandler}
