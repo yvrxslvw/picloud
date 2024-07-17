@@ -1,10 +1,12 @@
 @use '@styles' as *;
 
-.LoginWindow {
+.RegisterWindow {
 	.FeatureElement {
-		margin-bottom: 10px;
+		&.SmallMargin {
+			margin-bottom: 10px;
+		}
 
-		&:first-child {
+		&.LargeMargin {
 			margin-bottom: 25px;
 		}
 
@@ -19,7 +21,7 @@
 		}
 	}
 
-	.RegistrationLink {
+	.AuthLink {
 		text-align: center;
 	}
 }

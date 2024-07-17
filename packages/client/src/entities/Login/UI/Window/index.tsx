@@ -29,7 +29,7 @@ export const LoginWindow: FC<LoginWindowProps> = ({
 				<div className={cl.FeatureElement}>{loginInput}</div>
 				<div className={cl.FeatureElement}>{passwordInput}</div>
 				<div className={cn(cl.FeatureElement, cl.ErrorMessage)}>{errorText}</div>
-				<div className={cn(cl.FeatureElement, cl.AuthButton)}>{authButton}</div>
+				<div className={cn(cl.FeatureElement, cl.ButtonBody)}>{authButton}</div>
 			</form>
 			<Text small dark className={cl.RegistrationLink}>
 				Нет аккаунта? <Link to={ROUTER_PATHS.REGISTER_PAGE}>Регистрация</Link>
