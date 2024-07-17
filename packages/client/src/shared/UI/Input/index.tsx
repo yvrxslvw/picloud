@@ -21,7 +21,7 @@ export const Input: FC<InputProps> = ({ className, label, type, ...props }) => {
 			<input type={type === 'password' ? (isPasswordShown ? 'text' : 'password') : type} {...props} />
 
 			{type === 'password' && (
-				<button onClick={onClickHandler}>
+				<button onClick={onClickHandler} type='button'>
 					<FontAwesomeIcon icon={isPasswordShown ? faEye : faEyeSlash} />
 				</button>
 			)}

@@ -1,0 +1,25 @@
+@use '@styles' as *;
+
+.LoginWindow {
+	.FeatureElement {
+		margin-bottom: 10px;
+
+		&:first-child {
+			margin-bottom: 25px;
+		}
+
+		&.ErrorMessage p {
+			color: $red_color;
+			text-align: right;
+		}
+
+		&.AuthButton {
+			display: flex;
+			justify-content: center;
+		}
+	}
+
+	.RegistrationLink {
+		text-align: center;
+	}
+}

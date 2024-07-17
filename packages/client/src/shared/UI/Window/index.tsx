@@ -8,11 +8,11 @@ interface WindowProps extends HTMLAttributes<HTMLDivElement> {
 
 export const Window: FC<WindowProps> = ({ className, children, title, ...props }) => {
 	return (
-		<div className={cn(cl.Window, className)} {...props}>
+		<div className={cl.Window} {...props}>
 			<div className={cl.WindowHeader}>
 				<h2>{title}</h2>
 			</div>
-			<div className={cl.WindowBody}>{children}</div>
+			<div className={cn(cl.WindowBody, className)}>{children}</div>
 		</div>
 	);
 };
