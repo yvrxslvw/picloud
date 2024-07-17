@@ -1,9 +1,9 @@
 import { FC } from 'react';
 
-export const LoginPage: FC = () => {
+export const RegisterPage: FC = () => {
 	return (
 		<>
-			login
+			register
 		</>
 	);
 };

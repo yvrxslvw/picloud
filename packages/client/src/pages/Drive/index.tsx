@@ -1,9 +1,9 @@
 import { FC } from 'react';
 
-export const LoginPage: FC = () => {
+export const DrivePage: FC = () => {
 	return (
 		<>
-			login
+			drive
 		</>
 	);
 };

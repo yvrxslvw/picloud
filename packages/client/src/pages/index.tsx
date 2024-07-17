@@ -1,7 +1,8 @@
 import { FC } from 'react';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import { Layout } from 'widgets/Layout';
-import { PublicRoutes } from './routes';
+import { useAppSelector } from 'shared/hooks';
+import { PrivateRoutes, PublicRoutes } from './routes';
 
 const PublicRouter = createBrowserRouter([
 	{
@@ -10,6 +11,15 @@ const PublicRouter = createBrowserRouter([
 	},
 ]);
 
+const PrivateRouter = createBrowserRouter([
+	{
+		element: <Layout />,
+		children: PrivateRoutes,
+	},
+]);
+
 export const AppRouter: FC = () => {
-	return <RouterProvider router={PublicRouter} />; //! tmp
+	const user = useAppSelector(state => state.user);
+
+	return <RouterProvider router={user.isLogged ? PrivateRouter : PublicRouter} />;
 };
