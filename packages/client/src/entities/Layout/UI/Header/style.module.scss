@@ -7,9 +7,33 @@
 	.HeaderRow {
 		@include container;
 
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+
 		a {
 			text-decoration: none;
 			color: initial;
+		}
+
+		.Account {
+			display: flex;
+			align-items: center;
+			gap: 25px;
+
+			.DriveSpace {
+				display: flex;
+				flex-direction: column;
+				align-items: center;
+				gap: 5px;
+				user-select: none;
+			}
+
+			.Image img {
+				width: 50px;
+				height: 50px;
+				border-radius: 50%;
+			}
 		}
 	}
 }

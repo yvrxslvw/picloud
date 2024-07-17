@@ -1,18 +1,46 @@
-import { FC, HTMLAttributes } from 'react';
+import { FC, HTMLAttributes, ReactNode } from 'react';
 import { Link } from 'react-router-dom';
 import cn from 'classnames';
-import { Logo } from 'shared/UI';
+import { Logo, ProgressBar, Text } from 'shared/UI';
 import cl from './style.module.scss';
 
-interface HeaderProps extends HTMLAttributes<HTMLDivElement> {}
+interface HeaderProps extends HTMLAttributes<HTMLDivElement> {
+	isLogged: boolean;
+	usedSpace: string | undefined;
+	usedSpacePercentage: number | undefined;
+	totalSpace: number | undefined;
+	isNotEnoughSpace: boolean;
+	profileImageDropdown: ReactNode;
+}
 
-export const Header: FC<HeaderProps> = ({ className, ...props }) => {
+export const Header: FC<HeaderProps> = ({
+	className,
+	isLogged,
+	usedSpace,
+	usedSpacePercentage,
+	totalSpace,
+	isNotEnoughSpace,
+	profileImageDropdown,
+	...props
+}) => {
 	return (
 		<div className={cn(cl.Header, className)} {...props}>
 			<div className={cl.HeaderRow}>
 				<Link to='/'>
 					<Logo />
 				</Link>
+				{isLogged && (
+					<div className={cl.Account}>
+						<div className={cl.DriveSpace}>
+							<Text small>Использовано места:</Text>
+							<ProgressBar progress={usedSpacePercentage ?? 0} red={isNotEnoughSpace} />
+							<Text small>
+								{usedSpace} / {totalSpace} ГБ
+							</Text>
+						</div>
+						<div className={cl.Image}>{profileImageDropdown}</div>
+					</div>
+				)}
 			</div>
 		</div>
 	);
