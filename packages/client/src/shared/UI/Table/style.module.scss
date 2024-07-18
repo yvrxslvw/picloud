@@ -1,0 +1,30 @@
+@use '@styles' as *;
+
+.Table {
+	width: 100%;
+	user-select: none;
+	border-collapse: collapse;
+	font-size: 18px;
+	color: $black_color;
+	text-align: center;
+
+	th {
+		border-bottom: 3px solid $light_gray_color;
+		padding: 10px 0px;
+		font-weight: 700;
+	}
+
+	td {
+		border-bottom: 1px solid $light_gray_color;
+		padding: 15px 0px;
+		font-weight: 400;
+	}
+
+	tbody tr {
+		cursor: pointer;
+
+		&:hover {
+			background-color: rgba($color: $light_gray_color, $alpha: 0.75);
+		}
+	}
+}

@@ -6,3 +6,4 @@ export * from './Link';
 export * from './Text';
 export * from './ProgressBar';
 export * from './Dropdown';
+export * from './Table';
