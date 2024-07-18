@@ -3,13 +3,21 @@
 .DropdownRoot {
 	position: relative;
 
+	.CloseArea {
+		width: 100vw;
+		height: 100vh;
+		position: fixed;
+		top: 0px;
+		left: 0px;
+	}
+
 	.MainElement {
 		cursor: pointer;
 		user-select: none;
 	}
 
 	.Menu {
-		transition: opacity 0.4s ease;
+		transition: opacity 0.2s ease;
 		position: absolute;
 		top: 60px;
 		right: 0px;
@@ -18,6 +26,7 @@
 		width: 200px;
 		max-height: 300px;
 		overflow-y: auto;
+		display: none;
 
 		&::-webkit-scrollbar {
 			width: 7px;
