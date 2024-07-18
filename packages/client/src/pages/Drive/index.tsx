@@ -1,7 +1,6 @@
-import { faFile, faFolder } from '@fortawesome/free-solid-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { FC } from 'react';
 import { Table } from 'shared/UI';
+import { FileItem } from 'entities/File';
 
 export const DrivePage: FC = () => {
 	return (
@@ -16,24 +15,8 @@ export const DrivePage: FC = () => {
 					</tr>
 				</thead>
 				<tbody>
-					<tr>
-						<td><FontAwesomeIcon icon={faFolder} /></td>
-						<td>кусь</td>
-						<td>16.07.2024 в 17:44</td>
-						<td>-</td>
-					</tr>
-					<tr>
-						<td><FontAwesomeIcon icon={faFile} /></td>
-						<td>кусь.exe</td>
-						<td>16.07.2024 в 17:44</td>
-						<td>290 ГБ</td>
-					</tr>
-					<tr>
-						<td><FontAwesomeIcon icon={faFile} /></td>
-						<td>кусь.exe</td>
-						<td>16.07.2024 в 17:44</td>
-						<td>290 ГБ</td>
-					</tr>
+					<FileItem file={{ isFolder: true, name: 'папка с цыплятами', modifyTime: '07.16.2024 17:44:25', size: 0 }} />
+					<FileItem file={{ isFolder: false, name: 'тяжелый кусь.exe', modifyTime: '07.16.2024 17:44:25', size: 290 }} />
 				</tbody>
 			</Table>
 		</>
