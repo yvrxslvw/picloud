@@ -21,7 +21,7 @@
 		position: absolute;
 		top: 60px;
 		right: 0px;
-		background-color: rgba($color: $dark_gray_color, $alpha: 0.75);
+		background-color: rgba($color: $dark_gray_color, $alpha: 0.90);
 		border-radius: 15px;
 		width: 200px;
 		max-height: 300px;
@@ -51,6 +51,7 @@
 
 	p {
 		font-size: 16px;
+		font-weight: 700;
 		color: $white_color;
 		text-align: center;
 		padding: 10px 5px;
