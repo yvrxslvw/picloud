@@ -17,7 +17,7 @@ export const Layout: FC<LayoutProps> = () => {
 				isLogged={isLogged}
 				usedSpace={userInfo?.usedSpace.toFixed(2)}
 				usedSpacePercentage={usedSpacePercentage}
-				totalSpace={userInfo?.totalSpace}
+				totalSpace={userInfo?.totalSpace.toFixed(2)}
 				isNotEnoughSpace={usedSpacePercentage >= 80}
 				profileImageDropdown={<ProfileImageDropdown imageLink={userInfo?.profileImage} />}
 			/>

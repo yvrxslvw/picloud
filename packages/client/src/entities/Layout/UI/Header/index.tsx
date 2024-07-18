@@ -8,7 +8,7 @@ interface HeaderProps extends HTMLAttributes<HTMLDivElement> {
 	isLogged: boolean;
 	usedSpace: string | undefined;
 	usedSpacePercentage: number | undefined;
-	totalSpace: number | undefined;
+	totalSpace: string | undefined;
 	isNotEnoughSpace: boolean;
 	profileImageDropdown: ReactNode;
 }
@@ -23,6 +23,8 @@ export const Header: FC<HeaderProps> = ({
 	profileImageDropdown,
 	...props
 }) => {
+	if (usedSpacePercentage && usedSpacePercentage > 100) usedSpacePercentage = 100;
+
 	return (
 		<div className={cn(cl.Header, className)} {...props}>
 			<div className={cl.HeaderRow}>
