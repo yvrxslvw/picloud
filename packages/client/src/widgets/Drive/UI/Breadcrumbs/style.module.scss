@@ -1,0 +1,32 @@
+@use '@styles' as *;
+
+.Breadcrumbs {
+	display: flex;
+	gap: 10px;
+	align-items: center;
+
+	.Breadcrumb {
+		background-color: $light_gray_color;
+		padding: 5px 10px;
+		border-radius: 5px;
+		font-size: 14px;
+		font-weight: 700;
+		color: $black_color;
+		cursor: pointer;
+		user-select: none;
+		transition: opacity 0.4s ease;
+
+		&.DriveRoot {
+			background-color: $accent_color;
+			color: $white_color;
+		}
+
+		&:hover {
+			opacity: 0.7;
+		}
+	}
+
+	.Arrow {
+		font-size: 14px;
+	}
+}
