@@ -11,6 +11,6 @@ export const PublicRoutes: RouteObject[] = [
 ];
 
 export const PrivateRoutes: RouteObject[] = [
-	{ element: <DrivePage />, path: ROUTER_PATHS.DRIVE_PAGE },
+	{ element: <DrivePage />, path: ROUTER_PATHS.DRIVE_PAGE + '/*' },
 	{ element: <Navigate to={ROUTER_PATHS.DRIVE_PAGE} replace />, path: '/*' },
 ];

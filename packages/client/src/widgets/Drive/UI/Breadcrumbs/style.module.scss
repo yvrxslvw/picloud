@@ -4,6 +4,13 @@
 	display: flex;
 	gap: 10px;
 	align-items: center;
+	flex-wrap: wrap;
+
+	section {
+		display: flex;
+		gap: 10px;
+		align-items: center;
+	}
 
 	.Breadcrumb {
 		background-color: $light_gray_color;

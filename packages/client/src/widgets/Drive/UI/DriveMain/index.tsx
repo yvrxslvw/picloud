@@ -6,6 +6,10 @@ import { AddFileButton, FileContext, FileFeature, WidgetContext } from 'features
 import cl from './style.module.scss';
 
 const files: IFile[] = [
+	{ isFolder: true, name: 'папка 1', modifyTime: 1721141062000, size: 0 },
+	{ isFolder: true, name: 'папка 2', modifyTime: 1721141043000, size: 0 },
+	{ isFolder: true, name: 'папка 3', modifyTime: 1721141023000, size: 0 },
+	{ isFolder: true, name: 'папка 4', modifyTime: 1721141049000, size: 0 },
 	{ isFolder: true, name: 'папка 5', modifyTime: 1721141065000, size: 0 },
 	{ isFolder: true, name: 'папка 6', modifyTime: 1721141076000, size: 0 },
 	{ isFolder: false, name: 'файл.exe', modifyTime: 1721141089000, size: 4.39 },
