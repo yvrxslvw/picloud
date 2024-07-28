@@ -1,44 +1,48 @@
-import { FC, HTMLAttributes, useEffect, useRef } from 'react';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faPlus } from '@fortawesome/free-solid-svg-icons';
+import { FC, HTMLAttributes, useEffect, useRef, useState } from 'react';
 import cn from 'classnames';
-import { Context, Table } from 'shared/UI';
-import { FileItem } from 'entities/File';
+import { IFile } from 'shared/models';
+import { Table } from 'shared/UI';
+import { AddFileButton, FileContext, FileFeature, WidgetContext } from 'features/Drive';
 import cl from './style.module.scss';
+
+const files: IFile[] = [
+	{ isFolder: true, name: 'папка 5', modifyTime: 1721141065000, size: 0 },
+	{ isFolder: true, name: 'папка 6', modifyTime: 1721141076000, size: 0 },
+	{ isFolder: false, name: 'файл.exe', modifyTime: 1721141089000, size: 4.39 },
+	{ isFolder: false, name: 'файл.txt', modifyTime: 1722189099000, size: 0.01 },
+];
 
 interface DriveMainWidgetProps extends HTMLAttributes<HTMLDivElement> {}
 
 export const DriveMainWidget: FC<DriveMainWidgetProps> = ({ className, ...props }) => {
 	const widgetRef = useRef<HTMLDivElement>(null);
-	const contextRef = useRef<HTMLUListElement>(null);
+	const widgetContextRef = useRef<HTMLUListElement>(null);
+	const fileContextRef = useRef<HTMLUListElement>(null);
+	const [selectedFile, setSelectedFile] = useState<IFile>();
 
-	const onWidgetHandler = (e: MouseEvent) => {
+	const onWidgetContextMenuHandler = (e: MouseEvent) => {
 		e.preventDefault();
 
-		if (!contextRef.current) return;
-		contextRef.current.style.display = 'block';
-		contextRef.current.style.top = `${e.clientY + 10}px`;
-		contextRef.current.style.left = `${e.clientX + 10}px`;
+		if (!widgetContextRef.current || !fileContextRef.current) return;
+		fileContextRef.current.style.display = 'none';
+		widgetContextRef.current.style.display = 'block';
+		widgetContextRef.current.style.top = `${e.clientY + 10}px`;
+		widgetContextRef.current.style.left = `${e.clientX + 10}px`;
 	};
 
-	const onContextHandler = (e: MouseEvent) => {
-		e.stopPropagation();
-	};
-
-	const onDocumentHandler = () => {
-		if (!contextRef.current) return;
-		contextRef.current.style.display = 'none';
+	const onDocumentClickHandler = () => {
+		if (!widgetContextRef.current || !fileContextRef.current) return;
+		widgetContextRef.current.style.display = 'none';
+		fileContextRef.current.style.display = 'none';
 	};
 
 	useEffect(() => {
-		widgetRef.current?.addEventListener('contextmenu', onWidgetHandler);
-		contextRef.current?.addEventListener('click', onContextHandler);
-		document.addEventListener('click', onDocumentHandler);
+		widgetRef.current?.addEventListener('contextmenu', onWidgetContextMenuHandler);
+		document.addEventListener('click', onDocumentClickHandler);
 
 		return () => {
-			widgetRef.current?.removeEventListener('contextmenu', onWidgetHandler);
-			contextRef.current?.removeEventListener('click', onContextHandler);
-			document.removeEventListener('click', onDocumentHandler);
+			widgetRef.current?.removeEventListener('contextmenu', onWidgetContextMenuHandler);
+			document.removeEventListener('click', onDocumentClickHandler);
 		};
 	}, []);
 
@@ -54,20 +58,21 @@ export const DriveMainWidget: FC<DriveMainWidgetProps> = ({ className, ...props 
 					</tr>
 				</thead>
 				<tbody>
-					<FileItem file={{ isFolder: true, name: 'папка', modifyTime: '07.16.2024 17:44:25', size: 0 }} />
-					<FileItem file={{ isFolder: true, name: 'папка', modifyTime: '07.16.2024 17:44:25', size: 0 }} />
-					<FileItem file={{ isFolder: false, name: 'файл.exe', modifyTime: '07.16.2024 17:44:25', size: 4.39 }} />
+					{files.map(file => (
+						<FileFeature
+							file={file}
+							widgetRef={widgetContextRef}
+							contextRef={fileContextRef}
+							setSelectedFile={setSelectedFile}
+							key={file.modifyTime}
+						/>
+					))}
 				</tbody>
 			</Table>
 
-			<button className={cl.AddFileButton}>
-				<FontAwesomeIcon icon={faPlus} />
-			</button>
-
-			<Context.Menu className={cl.Context} ref={contextRef}>
-				<Context.Item>Создать папку</Context.Item>
-				<Context.Item>Добавить файл</Context.Item>
-			</Context.Menu>
+			<AddFileButton />
+			<WidgetContext widgetContextRef={widgetContextRef} />
+			<FileContext fileContextRef={fileContextRef} selectedFile={selectedFile} />
 		</div>
 	);
 };

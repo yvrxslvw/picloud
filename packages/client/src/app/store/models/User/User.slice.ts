@@ -13,7 +13,7 @@ const initialState: UserState = {
 		id: 1,
 		login: 'yvrxslvw',
 		profileImage: 'https://dictionary.cambridge.org/ru/images/full/chick_noun_002_06563.jpg?version=6.0.27',
-		usedSpace: 4.39,
+		usedSpace: 4.40,
 		totalSpace: 15,
 	},
 	// userInfo: null
