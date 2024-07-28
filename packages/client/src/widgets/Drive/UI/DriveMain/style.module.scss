@@ -1,6 +1,8 @@
 @use '@styles' as *;
 
 .DriveMain {
+	height: 100%;
+
 	.AddFileButton {
 		border: none;
 		outline: none;

@@ -18,7 +18,7 @@ export const FileItem: FC<FileItemProps> = ({ file, className, ...props }) => {
 			</td>
 			<td>{file.name}</td>
 			<td>{formatDate(file.modifyTime)}</td>
-			<td>{file.size === 0 ? '-' : file.size + ' ГБ'}</td>
+			<td>{file.size === 0 ? '-' : file.size.toFixed(2) + ' ГБ'}</td>
 		</tr>
 	);
 };

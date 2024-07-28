@@ -1,4 +1,4 @@
-import { FC, HTMLAttributes } from 'react';
+import { FC, HTMLAttributes, useEffect, useRef } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlus } from '@fortawesome/free-solid-svg-icons';
 import cn from 'classnames';
@@ -9,8 +9,23 @@ import cl from './style.module.scss';
 interface DriveMainWidgetProps extends HTMLAttributes<HTMLDivElement> {}
 
 export const DriveMainWidget: FC<DriveMainWidgetProps> = ({ className, ...props }) => {
+	const widgetRef = useRef<HTMLDivElement>(null);
+
+	const onContextHandler = (e: MouseEvent) => {
+		e.preventDefault();
+
+		// eslint-disable-next-line no-console
+		console.log('there\'ll be widget context menu');
+	};
+
+	useEffect(() => {
+		widgetRef.current?.addEventListener('contextmenu', onContextHandler);
+
+		return () => widgetRef.current?.removeEventListener('contextmenu', onContextHandler);
+	}, []);
+
 	return (
-		<div className={cn(cl.DriveMain, className)} {...props}>
+		<div className={cn(cl.DriveMain, className)} ref={widgetRef} {...props}>
 			<Table>
 				<thead>
 					<tr>
