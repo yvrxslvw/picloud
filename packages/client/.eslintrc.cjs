@@ -37,5 +37,7 @@ module.exports = {
 		'no-multiple-empty-lines': [2, { max: 1, maxEOF: 0 }],
 		'react-hooks/exhaustive-deps': 0,
 		'react/react-in-jsx-scope': 0,
+		'react/display-name': 0,
+		'react/prop-types': 0,
 	},
 };

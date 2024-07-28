@@ -2,7 +2,7 @@ import { FC, HTMLAttributes, useEffect, useRef } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlus } from '@fortawesome/free-solid-svg-icons';
 import cn from 'classnames';
-import { Table } from 'shared/UI';
+import { Context, Table } from 'shared/UI';
 import { FileItem } from 'entities/File';
 import cl from './style.module.scss';
 
@@ -10,18 +10,36 @@ interface DriveMainWidgetProps extends HTMLAttributes<HTMLDivElement> {}
 
 export const DriveMainWidget: FC<DriveMainWidgetProps> = ({ className, ...props }) => {
 	const widgetRef = useRef<HTMLDivElement>(null);
+	const contextRef = useRef<HTMLUListElement>(null);
 
-	const onContextHandler = (e: MouseEvent) => {
+	const onWidgetHandler = (e: MouseEvent) => {
 		e.preventDefault();
 
-		// eslint-disable-next-line no-console
-		console.log('there\'ll be widget context menu');
+		if (!contextRef.current) return;
+		contextRef.current.style.display = 'block';
+		contextRef.current.style.top = `${e.clientY + 10}px`;
+		contextRef.current.style.left = `${e.clientX + 10}px`;
+	};
+
+	const onContextHandler = (e: MouseEvent) => {
+		e.stopPropagation();
+	};
+
+	const onDocumentHandler = () => {
+		if (!contextRef.current) return;
+		contextRef.current.style.display = 'none';
 	};
 
 	useEffect(() => {
-		widgetRef.current?.addEventListener('contextmenu', onContextHandler);
+		widgetRef.current?.addEventListener('contextmenu', onWidgetHandler);
+		contextRef.current?.addEventListener('click', onContextHandler);
+		document.addEventListener('click', onDocumentHandler);
 
-		return () => widgetRef.current?.removeEventListener('contextmenu', onContextHandler);
+		return () => {
+			widgetRef.current?.removeEventListener('contextmenu', onWidgetHandler);
+			contextRef.current?.removeEventListener('click', onContextHandler);
+			document.removeEventListener('click', onDocumentHandler);
+		};
 	}, []);
 
 	return (
@@ -45,6 +63,11 @@ export const DriveMainWidget: FC<DriveMainWidgetProps> = ({ className, ...props 
 			<button className={cl.AddFileButton}>
 				<FontAwesomeIcon icon={faPlus} />
 			</button>
+
+			<Context.Menu className={cl.Context} ref={contextRef}>
+				<Context.Item>Создать папку</Context.Item>
+				<Context.Item>Добавить файл</Context.Item>
+			</Context.Menu>
 		</div>
 	);
 };

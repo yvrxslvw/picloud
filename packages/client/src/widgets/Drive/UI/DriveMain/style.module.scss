@@ -24,4 +24,9 @@
 			background-color: rgba($color: $accent_color, $alpha: 0.7);
 		}
 	}
+
+	.Context {
+		position: absolute;
+		display: none;
+	}
 }
