@@ -1,5 +1,4 @@
 import { FC, HTMLAttributes, ReactNode } from 'react';
-import { Link } from 'react-router-dom';
 import cn from 'classnames';
 import { Logo, ProgressBar, Text } from 'shared/UI';
 import cl from './style.module.scss';
@@ -28,9 +27,7 @@ export const Header: FC<HeaderProps> = ({
 	return (
 		<div className={cn(cl.Header, className)} {...props}>
 			<div className={cl.HeaderRow}>
-				<Link to='/'>
-					<Logo />
-				</Link>
+				<Logo />
 				{isLogged && (
 					<div className={cl.Account}>
 						<div className={cl.DriveSpace}>
