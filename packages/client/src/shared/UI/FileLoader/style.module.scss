@@ -1,0 +1,20 @@
+@use '@styles' as *;
+
+.FileLoader {
+	display: flex;
+	flex-direction: column;
+	gap: 10px;
+
+	label {
+		cursor: pointer;
+		width: min-content;
+	}
+
+	.Input {
+		display: none;
+	}
+
+	.FileList {
+		user-select: none;
+	}
+}

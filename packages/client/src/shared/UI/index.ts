@@ -8,3 +8,4 @@ export * from './ProgressBar';
 export * from './Dropdown';
 export * from './Table';
 export * from './Context';
+export * from './FileLoader';

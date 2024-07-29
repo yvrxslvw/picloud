@@ -1,0 +1,15 @@
+@use '@styles' as *;
+
+.ProfileImageLoader {
+	padding: 10px 20px;
+	font-weight: 700;
+	background-color: $accent_color;
+	border-radius: 10px;
+	color: $white_color;
+	width: min-content;
+	transition: background-color 0.4s ease;
+
+	&:hover {
+		background-color: rgba($color: $accent_color, $alpha: 0.75);
+	}
+}
