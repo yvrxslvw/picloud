@@ -8,7 +8,6 @@ interface RegisterWindowProps extends HTMLAttributes<HTMLDivElement> {
 	loginInput: ReactNode;
 	passwordInput: ReactNode;
 	passwordConfirmInput: ReactNode;
-	errorText: ReactNode;
 	registerButton: ReactNode;
 }
 
@@ -17,7 +16,6 @@ export const RegisterWindow: FC<RegisterWindowProps> = ({
 	loginInput,
 	passwordInput,
 	passwordConfirmInput,
-	errorText,
 	registerButton,
 	...props
 }) => {
@@ -31,7 +29,6 @@ export const RegisterWindow: FC<RegisterWindowProps> = ({
 				<div className={cn(cl.FeatureElement, cl.LargeMargin)}>{loginInput}</div>
 				<div className={cn(cl.FeatureElement, cl.LargeMargin)}>{passwordInput}</div>
 				<div className={cn(cl.FeatureElement, cl.SmallMargin)}>{passwordConfirmInput}</div>
-				<div className={cn(cl.FeatureElement, cl.SmallMargin, cl.ErrorMessage)}>{errorText}</div>
 				<div className={cn(cl.FeatureElement, cl.SmallMargin, cl.ButtonBody)}>{registerButton}</div>
 			</form>
 			<Text small dark className={cl.AuthLink}>

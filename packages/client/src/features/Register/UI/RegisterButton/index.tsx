@@ -1,4 +1,5 @@
-import { Dispatch, FC, SetStateAction } from 'react';
+import { usePopup } from 'entities/Popup';
+import { FC } from 'react';
 import { LoginRegex, PasswordRegex } from 'shared/regex';
 import { Button } from 'shared/UI';
 
@@ -6,16 +7,17 @@ interface RegisterButtonProps {
 	login: string;
 	password: string;
 	passwordConfirm: string;
-	setError: Dispatch<SetStateAction<string>>;
 }
 
-export const RegisterButton: FC<RegisterButtonProps> = ({ login, password, passwordConfirm, setError }) => {
-	const onClickHandler = () => {
-		if (!login.match(LoginRegex)) return setError('Некорректный логин.');
-		if (!password.match(PasswordRegex)) return setError('Пароль слишком простой.');
-		if (password !== passwordConfirm) return setError('Пароли не совпадают.');
+export const RegisterButton: FC<RegisterButtonProps> = ({ login, password, passwordConfirm }) => {
+	const { createPopup } = usePopup();
 
-		setError('reg'); //! tmp
+	const onClickHandler = () => {
+		if (!login.match(LoginRegex)) return createPopup('Некорректный логин.');
+		if (!password.match(PasswordRegex)) return createPopup('Пароль слишком простой.');
+		if (password !== passwordConfirm) return createPopup('Пароли не совпадают.');
+
+		createPopup('reg'); //! tmp
 	};
 
 	return (

@@ -1,18 +1,20 @@
-import { Dispatch, FC, SetStateAction } from 'react';
+import { usePopup } from 'entities/Popup';
+import { FC } from 'react';
 import { Button } from 'shared/UI';
 
 interface AuthButtonProps {
 	login: string;
 	password: string;
-	setErrorText: Dispatch<SetStateAction<string>>;
 }
 
-export const AuthButton: FC<AuthButtonProps> = ({ login, password, setErrorText }) => {
-	const onClickHandler = () => {
-		if (!login) return setErrorText('Неверный логин или пароль.');
-		if (!password) return setErrorText('Неверный логин или пароль.');
+export const AuthButton: FC<AuthButtonProps> = ({ login, password }) => {
+	const { createPopup } = usePopup();
 
-		setErrorText('Неверный логин или пароль.'); //! tmp
+	const onClickHandler = () => {
+		if (!login) return createPopup('Неверный логин или пароль.');
+		if (!password) return createPopup('Неверный логин или пароль.');
+
+		createPopup('Неверный логин или пароль.'); //! tmp
 	};
 
 	return (

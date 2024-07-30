@@ -1,24 +1,16 @@
 import { FC, FormEvent, HTMLAttributes, ReactNode } from 'react';
 import cn from 'classnames';
 import { Link, Text, Window } from 'shared/UI';
-import cl from './style.module.scss';
 import { ROUTER_PATHS } from 'shared/constants';
+import cl from './style.module.scss';
 
 interface LoginWindowProps extends HTMLAttributes<HTMLDivElement> {
 	loginInput: ReactNode;
 	passwordInput: ReactNode;
-	errorText: ReactNode;
 	authButton: ReactNode;
 }
 
-export const LoginWindow: FC<LoginWindowProps> = ({
-	className,
-	loginInput,
-	passwordInput,
-	errorText,
-	authButton,
-	...props
-}) => {
+export const LoginWindow: FC<LoginWindowProps> = ({ className, loginInput, passwordInput, authButton, ...props }) => {
 	const onSubmitHandler = (e: FormEvent<HTMLFormElement>) => {
 		e.preventDefault();
 	};
@@ -28,7 +20,6 @@ export const LoginWindow: FC<LoginWindowProps> = ({
 			<form onSubmit={onSubmitHandler}>
 				<div className={cl.FeatureElement}>{loginInput}</div>
 				<div className={cl.FeatureElement}>{passwordInput}</div>
-				<div className={cn(cl.FeatureElement, cl.ErrorMessage)}>{errorText}</div>
 				<div className={cn(cl.FeatureElement, cl.ButtonBody)}>{authButton}</div>
 			</form>
 			<Text small dark className={cl.RegistrationLink}>
