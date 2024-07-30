@@ -1,4 +1,8 @@
 .WidgetContext {
 	position: absolute;
 	display: none;
+
+	.Loader label {
+		width: 100%;
+	}
 }

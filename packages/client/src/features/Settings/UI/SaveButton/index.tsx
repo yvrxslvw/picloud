@@ -1,3 +1,4 @@
+import { usePopup } from 'entities/Popup';
 import { FC } from 'react';
 import { Button } from 'shared/UI';
 
@@ -9,8 +10,10 @@ interface SaveButtonProps {
 }
 
 export const SaveButton: FC<SaveButtonProps> = ({ image, login, password, passwordConfirm }) => {
+	const { createPopup } = usePopup();
+
 	const onClickHandler = () => {
-		console.log(image?.name, login, password, passwordConfirm);
+		createPopup(`${image ? image.name : 'no photo'} | ${login} | ${password} | ${passwordConfirm}`);
 	};
 
 	return <Button onClick={onClickHandler}>Сохранить</Button>;

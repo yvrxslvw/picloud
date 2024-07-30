@@ -1,5 +1,5 @@
-import { FC, RefObject } from 'react';
-import { Context } from 'shared/UI';
+import { ChangeEvent, FC, RefObject } from 'react';
+import { Context, FileLoader } from 'shared/UI';
 import cl from './style.module.scss';
 
 interface WidgetContextProps {
@@ -11,14 +11,19 @@ export const WidgetContext: FC<WidgetContextProps> = ({ widgetContextRef }) => {
 		console.log('create folder');
 	};
 
-	const onCreateFileHandler = () => {
-		console.log('create file');
+	const onChangeHandler = (e: ChangeEvent<HTMLInputElement>): boolean => {
+		const files = e.target.files;
+		if (!files) return false;
+		let str = '';
+		for (const file of files) str += file.name + ' ';
+		console.log(str.trim());
+		return true;
 	};
 
 	return (
 		<Context.Menu className={cl.WidgetContext} ref={widgetContextRef}>
 			<Context.Item onClick={onCreateFolderHandler}>Создать папку</Context.Item>
-			<Context.Item onClick={onCreateFileHandler}>Добавить файл</Context.Item>
+			<FileLoader className={cl.Loader} inputElement={<Context.Item>Добавить файл</Context.Item>} onChange={onChangeHandler} multiple />
 		</Context.Menu>
 	);
 };

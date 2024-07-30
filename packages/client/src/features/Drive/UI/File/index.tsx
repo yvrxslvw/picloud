@@ -27,7 +27,7 @@ export const FileFeature: FC<FileFeatureProps> = ({ file, widgetRef, contextRef,
 		if (!contextRef.current || !widgetRef.current) return;
 		widgetRef.current.style.display = 'none';
 		contextRef.current.style.display = 'block';
-		contextRef.current.style.top = `${e.clientY + 10}px`;
+		contextRef.current.style.top = `${e.clientY + window.scrollY + 10}px`;
 		contextRef.current.style.left = `${e.clientX + 10}px`;
 	};
 

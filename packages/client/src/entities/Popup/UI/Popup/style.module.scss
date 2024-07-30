@@ -1,0 +1,37 @@
+@use '@styles' as *;
+
+.Popup {
+	user-select: none;
+	cursor: pointer;
+	display: flex;
+	align-items: center;
+	gap: 15px;
+	background-color: rgba($color: $black_color, $alpha: 0.6);
+	padding: 15px 25px;
+	position: relative;
+	border-radius: 20px;
+	overflow: hidden;
+	width: max-content;
+	transition: transform 0.4s ease;
+
+	.Icon {
+		color: $light_gray_color;
+		font-size: 24px;
+	}
+
+	.Content {
+		font-weight: 700;
+		max-width: 500px;
+		word-break: break-all;
+		line-height: 125%;
+	}
+
+	.Progress {
+		position: absolute;
+		left: 0px;
+		bottom: 0px;
+		background-color: $accent_color;
+		height: 4px;
+		transition: width 0.4s ease;
+	}
+}

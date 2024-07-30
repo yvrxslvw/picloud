@@ -30,7 +30,7 @@ export const DriveMainWidget: FC<DriveMainWidgetProps> = ({ className, ...props 
 		if (!widgetContextRef.current || !fileContextRef.current) return;
 		fileContextRef.current.style.display = 'none';
 		widgetContextRef.current.style.display = 'block';
-		widgetContextRef.current.style.top = `${e.clientY + 10}px`;
+		widgetContextRef.current.style.top = `${e.clientY + window.scrollY + 10}px`;
 		widgetContextRef.current.style.left = `${e.clientX + 10}px`;
 	};
 
