@@ -1,3 +1,4 @@
+import { usePopup } from 'entities/Popup';
 import { FC } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ROUTER_PATHS } from 'shared/constants';
@@ -9,6 +10,7 @@ interface ProfileImageDropdownProps {
 
 export const ProfileImageDropdown: FC<ProfileImageDropdownProps> = ({ imageLink }) => {
 	const navigate = useNavigate();
+	const { createPopup } = usePopup();
 
 	const onClickDriveHandler = () => {
 		navigate(ROUTER_PATHS.DRIVE_PAGE);
@@ -19,7 +21,7 @@ export const ProfileImageDropdown: FC<ProfileImageDropdownProps> = ({ imageLink 
 	};
 
 	const onClickLogoutHandler = () => {
-		console.log('logout');
+		createPopup('logout');
 	};
 
 	return (

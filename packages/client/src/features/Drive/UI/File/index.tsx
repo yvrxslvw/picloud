@@ -1,7 +1,8 @@
 import { Dispatch, FC, RefObject, SetStateAction, useEffect, useRef } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { IFile } from 'shared/models';
 import { FileItem } from 'entities/File';
-import { useNavigate } from 'react-router-dom';
+import { usePopup } from 'entities/Popup';
 
 interface FileFeatureProps {
 	file: IFile;
@@ -13,9 +14,13 @@ interface FileFeatureProps {
 export const FileFeature: FC<FileFeatureProps> = ({ file, widgetRef, contextRef, setSelectedFile }) => {
 	const fileRef = useRef<HTMLTableRowElement>(null);
 	const navigate = useNavigate();
+	const { createPopup } = usePopup();
 
 	const onFileDoubleClickHandler = () => {
-		if (!file.isFolder) return;
+		if (!file.isFolder) {
+			createPopup('preview ' + file.name);
+			return;
+		}
 		navigate(location.pathname + `/${file.name}`);
 	};
 

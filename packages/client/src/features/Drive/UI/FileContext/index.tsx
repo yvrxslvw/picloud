@@ -1,7 +1,8 @@
 import { FC, RefObject } from 'react';
-import cl from './style.module.scss';
 import { Context } from 'shared/UI';
 import { IFile } from 'shared/models';
+import { usePopup } from 'entities/Popup';
+import cl from './style.module.scss';
 
 interface FileContextProps {
 	fileContextRef: RefObject<HTMLUListElement>;
@@ -9,12 +10,14 @@ interface FileContextProps {
 }
 
 export const FileContext: FC<FileContextProps> = ({ fileContextRef, selectedFile }) => {
+	const { createPopup } = usePopup();
+
 	const onRenameHandler = () => {
-		console.log('rename', selectedFile?.name);
+		createPopup('rename ' + selectedFile?.name);
 	};
 
 	const onDeleteHandler = () => {
-		console.log('delete', selectedFile?.name);
+		createPopup('delete ' + selectedFile?.name);
 	};
 
 	return (
