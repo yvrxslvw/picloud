@@ -37,7 +37,9 @@ export const Header: FC<HeaderProps> = ({
 								{usedSpace} / {totalSpace} ГБ
 							</Text>
 						</div>
-						<div className={cl.Image}>{profileImageDropdown}</div>
+						<div className={cl.Image}>
+							{profileImageDropdown}
+						</div>
 					</div>
 				)}
 			</div>
