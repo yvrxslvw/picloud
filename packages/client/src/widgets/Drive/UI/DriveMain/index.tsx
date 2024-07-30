@@ -1,9 +1,10 @@
-import { FC, HTMLAttributes, useEffect, useRef, useState } from 'react';
+import { FC, HTMLAttributes } from 'react';
 import cn from 'classnames';
 import { IFile } from 'shared/models';
 import { Table } from 'shared/UI';
 import { AddFileButton, FileContext, FileFeature, WidgetContext } from 'features/Drive';
 import cl from './style.module.scss';
+import { useContextMenu } from 'widgets/Drive/lib';
 
 const files: IFile[] = [
 	{ isFolder: true, name: 'папка 1', modifyTime: 1721141062000, size: 0 },
@@ -19,36 +20,7 @@ const files: IFile[] = [
 interface DriveMainWidgetProps extends HTMLAttributes<HTMLDivElement> {}
 
 export const DriveMainWidget: FC<DriveMainWidgetProps> = ({ className, ...props }) => {
-	const widgetRef = useRef<HTMLDivElement>(null);
-	const widgetContextRef = useRef<HTMLUListElement>(null);
-	const fileContextRef = useRef<HTMLUListElement>(null);
-	const [selectedFile, setSelectedFile] = useState<IFile>();
-
-	const onWidgetContextMenuHandler = (e: MouseEvent) => {
-		e.preventDefault();
-
-		if (!widgetContextRef.current || !fileContextRef.current) return;
-		fileContextRef.current.style.display = 'none';
-		widgetContextRef.current.style.display = 'block';
-		widgetContextRef.current.style.top = `${e.clientY + window.scrollY + 10}px`;
-		widgetContextRef.current.style.left = `${e.clientX + 10}px`;
-	};
-
-	const onDocumentClickHandler = () => {
-		if (!widgetContextRef.current || !fileContextRef.current) return;
-		widgetContextRef.current.style.display = 'none';
-		fileContextRef.current.style.display = 'none';
-	};
-
-	useEffect(() => {
-		widgetRef.current?.addEventListener('contextmenu', onWidgetContextMenuHandler);
-		document.addEventListener('click', onDocumentClickHandler);
-
-		return () => {
-			widgetRef.current?.removeEventListener('contextmenu', onWidgetContextMenuHandler);
-			document.removeEventListener('click', onDocumentClickHandler);
-		};
-	}, []);
+	const { widgetRef, widgetContextRef, fileContextRef, setSelectedFile, selectedFile } = useContextMenu();
 
 	return (
 		<div className={cn(cl.DriveMain, className)} ref={widgetRef} {...props}>
