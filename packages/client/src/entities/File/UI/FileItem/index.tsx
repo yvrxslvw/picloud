@@ -19,7 +19,7 @@ export const FileItem: FC<FileItemProps> = forwardRef(
 				</td>
 				<td>{file.name}</td>
 				<td>{formatDate(file.modifyTime)}</td>
-				<td>{file.size === 0 ? '-' : file.size.toFixed(2) + ' ГБ'}</td>
+				<td>{file.isFolder ? '-' : file.size.toFixed(2) + ' ГБ'}</td>
 			</tr>
 		);
 	},
