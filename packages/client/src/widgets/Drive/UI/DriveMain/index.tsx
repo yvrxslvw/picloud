@@ -14,8 +14,6 @@ const files: IFile[] = [
 	{ isFolder: true, name: 'папка 5', modifyTime: 1721141065000, size: 0 },
 	{ isFolder: true, name: 'папка 6', modifyTime: 1721141076000, size: 0 },
 	{ isFolder: false, name: 'файл.exe', modifyTime: 1721141089000, size: 4.39 },
-	{ isFolder: false, name: 'файл.txt', modifyTime: 1722189099000, size: 0.01 },
-	{ isFolder: false, name: 'index.tsx', modifyTime: 1722189099000, size: 0.0 },
 ];
 
 interface DriveMainWidgetProps extends HTMLAttributes<HTMLDivElement> {}
