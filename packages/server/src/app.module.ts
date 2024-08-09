@@ -1,6 +1,8 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { SequelizeModule } from '@nestjs/sequelize';
+import { ServeStaticModule } from '@nestjs/serve-static';
+import { resolve } from 'path';
 
 const isLocal = process.env.APP_ENV === 'local';
 const isDev = process.env.APP_MODE === 'dev';
@@ -19,6 +21,11 @@ if (isLocal) envFilePath += '.local';
 			database: process.env.PSQL_DATABASE,
 			logging: isDev ? sql => console.log(sql) : false,
 			autoLoadModels: true,
+		}),
+		ServeStaticModule.forRoot({
+			rootPath: resolve(__dirname, 'static'),
+			exclude: ['/api/(.*)'],
+			serveRoot: '/api',
 		}),
 	],
 	controllers: [],
