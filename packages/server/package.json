@@ -6,7 +6,7 @@
 	"private": true,
 	"license": "MIT",
 	"scripts": {
-		"dev": "APP_MODE=dev APP_ENV=local nest start --watch --local",
+		"dev": "APP_MODE=dev APP_ENV=local nest start --watch",
 		"build": "nest build",
 		"lint": "eslint"
 	},

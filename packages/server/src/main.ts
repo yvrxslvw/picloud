@@ -6,5 +6,6 @@ import { AppModule } from './app.module';
 	const PORT = process.env.APP_PORT;
 	const app = await NestFactory.create(AppModule);
 
+	app.setGlobalPrefix('/api');
 	await app.listen(PORT, HOST);
 })();
