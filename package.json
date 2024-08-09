@@ -1,17 +1,22 @@
 {
-  "name": "picloud",
+	"name": "picloud",
 	"private": true,
-  "version": "0.0.1",
+	"version": "0.0.1",
 	"author": {
 		"name": "yvrxslvw",
 		"email": "yvrxslvv@gmail.com",
 		"url": "https://github.com/yvrxslvw"
 	},
-  "license": "MIT",
-	"workspaces": ["./packages/*"],
+	"license": "MIT",
+	"workspaces": [
+		"./packages/*"
+	],
 	"scripts": {
 		"dev:client": "yarn workspace client dev",
 		"build:client": "yarn workspace client build",
-		"lint:client": "yarn workspace client lint"
+		"lint:client": "yarn workspace client lint",
+		"dev:server": "yarn workspace server dev",
+		"build:server": "yarn workspace server build",
+		"link:server": "yarn workspace server lint"
 	}
 }
