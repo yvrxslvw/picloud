@@ -1,9 +1,9 @@
 import { NestFactory } from '@nestjs/core';
 import { ValidationPipe } from '@nestjs/common';
-import { AppModule } from './app.module';
 import { ConfigService } from '@nestjs/config';
+import { AppModule } from './app.module';
 
-(async () => {
+const bootstrap = async () => {
 	const app = await NestFactory.create(AppModule);
 	const configService = app.get(ConfigService);
 	const HOST = configService.get('APP_HOST');
@@ -12,4 +12,5 @@ import { ConfigService } from '@nestjs/config';
 	app.useGlobalPipes(new ValidationPipe());
 	app.setGlobalPrefix('/api');
 	await app.listen(PORT, HOST);
-})();
+};
+bootstrap();
