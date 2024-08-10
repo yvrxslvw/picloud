@@ -16,6 +16,7 @@
 		"build:client": "yarn workspace client build",
 		"lint:client": "yarn workspace client lint",
 		"dev:server": "yarn workspace server dev",
+		"prod:server": "yarn workspace server prod",
 		"build:server": "yarn workspace server build",
 		"link:server": "yarn workspace server lint"
 	}
