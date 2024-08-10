@@ -37,7 +37,9 @@ export class UsersService {
 	async update(id: number, updateUserDto: UpdateUserDto) {
 		const user = await this.findOneById(id);
 		const { login, password, profileImage, usedSpace, totalSpace } = updateUserDto;
-		if (usedSpace && usedSpace > user.totalSpace)
+		if (login && login !== user.login && (await this.isUserExist(login)))
+			throw new ForbiddenException('Пользователь с данным логином уже существует.');
+		else if (usedSpace && usedSpace > user.totalSpace)
 			throw new BadRequestException('Использованного места не может быть больше суммарного места.');
 		else if (totalSpace && totalSpace < user.usedSpace)
 			throw new BadRequestException('Суммарного места не может быть меньше использованного места.');
