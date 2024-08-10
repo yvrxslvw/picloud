@@ -1,4 +1,4 @@
-import { ForbiddenException, Injectable, NotFoundException } from '@nestjs/common';
+import { BadRequestException, ForbiddenException, Injectable, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
 import * as bcrypt from 'bcrypt';
 import { CreateUserDto } from './dto/create-user.dto';
@@ -36,9 +36,13 @@ export class UsersService {
 
 	async update(id: number, updateUserDto: UpdateUserDto) {
 		const user = await this.findOneById(id);
-		const { login, password } = updateUserDto;
+		const { login, password, profileImage, usedSpace, totalSpace } = updateUserDto;
+		if (usedSpace && usedSpace > user.totalSpace)
+			throw new BadRequestException('Использованного места не может быть больше суммарного места.');
+		else if (totalSpace && totalSpace < user.usedSpace)
+			throw new BadRequestException('Суммарного места не может быть меньше использованного места.');
 		const hash = password && (await bcrypt.hash(password, 10));
-		await user.update({ login, password: hash });
+		await user.update({ login, password: hash, profileImage, usedSpace, totalSpace });
 		return user;
 	}
 
