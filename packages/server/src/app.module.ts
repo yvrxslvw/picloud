@@ -22,6 +22,7 @@ const envFilePath = ['.env', `.env.${appEnv}.local`, `.env.${appEnv}`];
 			database: process.env.PSQL_DATABASE,
 			logging: isDev ? sql => console.log(sql) : false,
 			autoLoadModels: true,
+			sync: { alter: isDev },
 		}),
 		ServeStaticModule.forRoot({
 			rootPath: resolve(__dirname, 'static'),
