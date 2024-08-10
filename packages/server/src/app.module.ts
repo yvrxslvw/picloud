@@ -3,6 +3,7 @@ import { ConfigModule } from '@nestjs/config';
 import { SequelizeModule } from '@nestjs/sequelize';
 import { ServeStaticModule } from '@nestjs/serve-static';
 import { resolve } from 'path';
+import { UsersModule } from './users/users.module';
 
 const isLocal = process.env.APP_ENV === 'local';
 const isDev = process.env.APP_MODE === 'dev';
@@ -27,6 +28,7 @@ if (isLocal) envFilePath += '.local';
 			exclude: ['/api/(.*)'],
 			serveRoot: '/api',
 		}),
+		UsersModule,
 	],
 	controllers: [],
 	providers: [],
