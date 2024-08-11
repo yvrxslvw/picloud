@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { forwardRef, Module } from '@nestjs/common';
 import { JwtModule } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
 import { AuthService } from './auth.service';
@@ -16,7 +16,8 @@ import { UsersModule } from 'src/users/users.module';
 				secret: config.get<string>('API_SECRET_KEY'),
 			}),
 		}),
-		UsersModule,
+		forwardRef(() => UsersModule),
 	],
+	exports: [JwtModule],
 })
 export class AuthModule {}
