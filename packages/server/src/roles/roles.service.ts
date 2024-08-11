@@ -19,24 +19,24 @@ export class RolesService {
 	}
 
 	async findAll() {
-		const roles = await this.roleRepo.findAll();
+		const roles = await this.roleRepo.findAll({ include: { all: true, nested: true } });
 		return roles;
 	}
 
 	async findOneById(id: number) {
-		const role = await this.roleRepo.findByPk(id);
+		const role = await this.roleRepo.findByPk(id, { include: { all: true, nested: true } });
 		if (!role) throw new NotFoundException(`Роли с ID ${id} не существует.`);
 		return role;
 	}
 
 	async findOneByTag(tag: string) {
-		const role = await this.roleRepo.findOne({ where: { tag } });
+		const role = await this.roleRepo.findOne({ where: { tag }, include: { all: true, nested: true } });
 		if (!role) throw new NotFoundException(`Роли с тегом ${tag} не существует.`);
 		return role;
 	}
 
 	async findOneByDescription(description: string) {
-		const role = await this.roleRepo.findOne({ where: { description } });
+		const role = await this.roleRepo.findOne({ where: { description }, include: { all: true, nested: true } });
 		if (!role) throw new NotFoundException(`Роли с описанием ${description} не существует.`);
 		return role;
 	}

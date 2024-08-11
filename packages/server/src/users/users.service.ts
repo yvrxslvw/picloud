@@ -18,18 +18,18 @@ export class UsersService {
 	}
 
 	async findAll() {
-		const users = await this.userRepo.findAll();
+		const users = await this.userRepo.findAll({ include: { all: true, nested: true } });
 		return users;
 	}
 
 	async findOneById(id: number) {
-		const user = await this.userRepo.findByPk(id);
+		const user = await this.userRepo.findByPk(id, { include: { all: true, nested: true } });
 		if (!user) throw new NotFoundException(`Пользователя с ID ${id} не существует.`);
 		return user;
 	}
 
 	async findOneByLogin(login: string) {
-		const user = await this.userRepo.findOne({ where: { login } });
+		const user = await this.userRepo.findOne({ where: { login }, include: { all: true, nested: true } });
 		if (!user) throw new NotFoundException(`Пользователя с логином ${login} не существует.`);
 		return user;
 	}
