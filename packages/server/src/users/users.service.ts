@@ -1,6 +1,5 @@
 import { BadRequestException, ForbiddenException, Injectable, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
-import * as bcrypt from 'bcrypt';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { RoleDto } from './dto/role.dto';
@@ -14,8 +13,10 @@ export class UsersService {
 	async create(createUserDto: CreateUserDto) {
 		const { login, password } = createUserDto;
 		if (await this.isUserExist(login)) throw new ForbiddenException('Пользователь с данным логином уже существует.');
-		const hash = await bcrypt.hash(password, 10);
-		const user = await this.userRepo.create({ login, password: hash });
+		const user = await this.userRepo.create({ login, password }, { include: { all: true, nested: true } });
+		const role = await this.rolesService.findOneByTag('USER');
+		if (role) await user.$set('roles', [role.id]);
+		await user.reload();
 		return user;
 	}
 
@@ -45,8 +46,7 @@ export class UsersService {
 			throw new BadRequestException('Использованного места не может быть больше суммарного места.');
 		else if (totalSpace && totalSpace < user.usedSpace)
 			throw new BadRequestException('Суммарного места не может быть меньше использованного места.');
-		const hash = password && (await bcrypt.hash(password, 10));
-		await user.update({ login, password: hash, profileImage, usedSpace, totalSpace });
+		await user.update({ login, password, profileImage, usedSpace, totalSpace });
 		return user;
 	}
 

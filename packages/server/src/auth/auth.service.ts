@@ -6,6 +6,7 @@ import * as bcrypt from 'bcrypt';
 import { User } from 'src/users/entities/user.entity';
 import { UsersService } from 'src/users/users.service';
 import { LoginDto } from './dto/login.dto';
+import { RegisterDto } from './dto/register.dto';
 
 @Injectable()
 export class AuthService {
@@ -24,6 +25,13 @@ export class AuthService {
 		} catch (_) {
 			throw new ForbiddenException('Неверный логин или пароль.');
 		}
+	}
+
+	async register(registerDto: RegisterDto, response: Response) {
+		const { login, password } = registerDto;
+		const hash = await bcrypt.hash(password, 10);
+		const user = await this.usersService.create({ login, password: hash });
+		return response.json({ token: await this.generateToken(user, response), user });
 	}
 
 	private async generateToken(user: User, response: Response): Promise<string> {
