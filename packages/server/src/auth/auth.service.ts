@@ -1,7 +1,7 @@
-import { ForbiddenException, Injectable } from '@nestjs/common';
+import { ForbiddenException, HttpCode, HttpStatus, Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
-import { Response } from 'express';
+import { Request, Response } from 'express';
 import * as bcrypt from 'bcrypt';
 import { User } from 'src/users/entities/user.entity';
 import { UsersService } from 'src/users/users.service';
@@ -32,6 +32,23 @@ export class AuthService {
 		const hash = await bcrypt.hash(password, 10);
 		const user = await this.usersService.create({ login, password: hash });
 		return response.json({ token: await this.generateToken(user, response), user });
+	}
+
+	async logout(response: Response) {
+		response.clearCookie('refreshToken', { path: '/api/auth/refresh' });
+		return response.status(HttpStatus.NO_CONTENT).end();
+	}
+
+	async refresh(request: Request, response: Response) {
+		try {
+			const token = request.cookies['refreshToken'];
+			if (!token) throw new ForbiddenException('Нет доступа.');
+			const { id } = await this.jwtService.verifyAsync<{ id: number }>(token);
+			const user = await this.usersService.findOneById(id);
+			return response.json({ token: await this.generateToken(user, response), user });
+		} catch (_) {
+			throw new ForbiddenException('Нет доступа.');
+		}
 	}
 
 	private async generateToken(user: User, response: Response): Promise<string> {
