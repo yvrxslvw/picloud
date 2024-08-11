@@ -1,4 +1,6 @@
-import { Column, DataType, Model, Table } from 'sequelize-typescript';
+import { BelongsToMany, Column, DataType, Model, Table } from 'sequelize-typescript';
+import { Role } from 'src/roles/entities/role.entity';
+import { UserRole } from 'src/roles/entities/user-role.entity';
 
 interface UserCreationAttributes {
 	login: string;
@@ -26,4 +28,7 @@ export class User extends Model<User, UserCreationAttributes> {
 	declare totalSpace: number;
 
 	declare createdAt: Date;
+
+	@BelongsToMany(() => Role, () => UserRole)
+	declare roles: Role[];
 }
