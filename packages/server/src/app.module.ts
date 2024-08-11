@@ -6,6 +6,7 @@ import { resolve } from 'path';
 import { UsersModule } from './users/users.module';
 import { validate } from './env.validation';
 import { RolesModule } from './roles/roles.module';
+import { AuthModule } from './auth/auth.module';
 
 const appEnv = process.env.NODE_ENV;
 const isDev = appEnv === 'development';
@@ -32,6 +33,7 @@ const envFilePath = ['.env', `.env.${appEnv}.local`, `.env.${appEnv}`];
 		}),
 		UsersModule,
 		RolesModule,
+		AuthModule,
 	],
 	controllers: [],
 	providers: [],

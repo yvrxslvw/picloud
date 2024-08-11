@@ -19,6 +19,9 @@ class EnvironmentVariables {
 	declare APP_PORT: number;
 
 	@IsString()
+	declare API_SECRET_KEY: string;
+
+	@IsString()
 	declare CLIENT_URL: string;
 
 	@IsString()
