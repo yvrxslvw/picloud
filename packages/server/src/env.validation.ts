@@ -19,6 +19,9 @@ class EnvironmentVariables {
 	declare APP_PORT: number;
 
 	@IsString()
+	declare CLIENT_URL: string;
+
+	@IsString()
 	declare PSQL_HOST: string;
 
 	@IsNumber()

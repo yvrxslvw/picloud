@@ -1,14 +1,16 @@
 import { NestFactory } from '@nestjs/core';
 import { ValidationPipe } from '@nestjs/common';
-import { ConfigService } from '@nestjs/config';
+import * as cookieParser from 'cookie-parser';
 import { AppModule } from './app.module';
 
-const bootstrap = async () => {
-	const app = await NestFactory.create(AppModule);
-	const configService = app.get(ConfigService);
-	const HOST = configService.get('APP_HOST');
-	const PORT = configService.get('APP_PORT');
+const HOST = process.env.APP_HOST;
+const PORT = process.env.APP_PORT;
+const CLIENT_URL = process.env.CLIENT_URL;
 
+const bootstrap = async () => {
+	const app = await NestFactory.create(AppModule, { cors: { origin: CLIENT_URL, credentials: true } });
+
+	app.use(cookieParser());
 	app.useGlobalPipes(new ValidationPipe());
 	app.setGlobalPrefix('/api');
 	await app.listen(PORT, HOST);
