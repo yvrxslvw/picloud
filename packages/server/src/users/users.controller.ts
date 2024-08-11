@@ -1,7 +1,8 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, ParseIntPipe } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, ParseIntPipe, Put } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
+import { RoleDto } from './dto/role.dto';
 
 @Controller('users')
 export class UsersController {
@@ -30,5 +31,15 @@ export class UsersController {
 	@Delete(':id')
 	remove(@Param('id', ParseIntPipe) id: string) {
 		return this.usersService.remove(+id);
+	}
+
+	@Patch(':id/add-role')
+	addRole(@Param('id', ParseIntPipe) id: string, @Body() roleDto: RoleDto) {
+		return this.usersService.addRole(+id, roleDto);
+	}
+
+	@Patch(':id/remove-role')
+	removeRole(@Param('id', ParseIntPipe) id: string, @Body() roleDto: RoleDto) {
+		return this.usersService.removeRole(+id, roleDto);
 	}
 }

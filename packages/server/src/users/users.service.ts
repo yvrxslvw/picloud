@@ -3,11 +3,13 @@ import { InjectModel } from '@nestjs/sequelize';
 import * as bcrypt from 'bcrypt';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
+import { RoleDto } from './dto/role.dto';
 import { User } from './entities/user.entity';
+import { RolesService } from 'src/roles/roles.service';
 
 @Injectable()
 export class UsersService {
-	constructor(@InjectModel(User) private readonly userRepo: typeof User) {}
+	constructor(@InjectModel(User) private readonly userRepo: typeof User, private readonly rolesService: RolesService) {}
 
 	async create(createUserDto: CreateUserDto) {
 		const { login, password } = createUserDto;
@@ -50,6 +52,26 @@ export class UsersService {
 		const user = await this.findOneById(id);
 		await user.destroy();
 		return { message: `Пользователь с ID ${id} успешно удалён.` };
+	}
+
+	async addRole(id: number, roleDto: RoleDto) {
+		const { tag } = roleDto;
+		const user = await this.findOneById(id);
+		const role = await this.rolesService.findOneByTag(tag);
+		if (await user.$has('role', role.id)) throw new BadRequestException('У данного пользователя уже есть эта роль.');
+		await user.$add('role', role.id);
+		await user.reload();
+		return user;
+	}
+
+	async removeRole(id: number, roleDto: RoleDto) {
+		const { tag } = roleDto;
+		const user = await this.findOneById(id);
+		const role = await this.rolesService.findOneByTag(tag);
+		if (!(await user.$has('role', role.id))) throw new BadRequestException('У данного пользователя нет этой роли.');
+		await user.$remove('role', role.id);
+		await user.reload();
+		return user;
 	}
 
 	async isUserExist(id: number): Promise<boolean>;
