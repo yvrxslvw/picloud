@@ -5,10 +5,16 @@ import { UpdateUserDto } from './dto/update-user.dto';
 import { RoleDto } from './dto/role.dto';
 import { User } from './entities/user.entity';
 import { RolesService } from 'src/roles/roles.service';
+import { FilesService } from 'src/files/files.service';
+import { v4 as uuidv4 } from 'uuid';
 
 @Injectable()
 export class UsersService {
-	constructor(@InjectModel(User) private readonly userRepo: typeof User, private readonly rolesService: RolesService) {}
+	constructor(
+		@InjectModel(User) private readonly userRepo: typeof User,
+		private readonly rolesService: RolesService,
+		private readonly filesService: FilesService,
+	) {}
 
 	async create(createUserDto: CreateUserDto) {
 		const { login, password } = createUserDto;
@@ -37,15 +43,21 @@ export class UsersService {
 		return user;
 	}
 
-	async update(id: number, updateUserDto: UpdateUserDto) {
+	async update(id: number, updateUserDto: UpdateUserDto, image?: any) {
 		const user = await this.findOneById(id);
-		const { login, password, profileImage, usedSpace, totalSpace } = updateUserDto;
+		const { login, password, usedSpace, totalSpace } = updateUserDto;
 		if (login && login !== user.login && (await this.isUserExist(login)))
 			throw new ForbiddenException('Пользователь с данным логином уже существует.');
 		else if (usedSpace && usedSpace > user.totalSpace)
 			throw new BadRequestException('Использованного места не может быть больше суммарного места.');
 		else if (totalSpace && totalSpace < user.usedSpace)
 			throw new BadRequestException('Суммарного места не может быть меньше использованного места.');
+		let profileImage: string;
+		if (image) {
+			if (user.profileImage) this.filesService.remove(`images/${user.profileImage}`);
+			profileImage = uuidv4() + '.jpg';
+			this.filesService.createFile('images', profileImage, image);
+		}
 		await user.update({ login, password, profileImage, usedSpace, totalSpace });
 		return user;
 	}

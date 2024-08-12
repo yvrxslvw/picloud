@@ -1,12 +1,8 @@
 import { PartialType } from '@nestjs/mapped-types';
 import { CreateUserDto } from './create-user.dto';
-import { IsNumber, IsOptional, IsUUID, Min } from 'class-validator';
+import { IsNumber, IsOptional, Min } from 'class-validator';
 
 export class UpdateUserDto extends PartialType(CreateUserDto) {
-	@IsOptional()
-	@IsUUID()
-	declare profileImage?: string;
-	
 	@IsOptional()
 	@IsNumber()
 	@Min(0)

@@ -1,10 +1,23 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, ParseIntPipe, UseGuards } from '@nestjs/common';
+import {
+	Controller,
+	Get,
+	Post,
+	Body,
+	Patch,
+	Param,
+	Delete,
+	ParseIntPipe,
+	UseGuards,
+	UseInterceptors,
+	UploadedFile,
+} from '@nestjs/common';
 import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { RoleDto } from './dto/role.dto';
 import { RolesGuard } from 'src/auth/guards/roles.guard';
 import { Roles } from 'src/auth/decorators/roles.decorator';
+import { FileInterceptor } from '@nestjs/platform-express';
 
 @Controller('users')
 export class UsersController {
@@ -33,9 +46,14 @@ export class UsersController {
 
 	@UseGuards(RolesGuard)
 	@Roles('ADMIN')
+	@UseInterceptors(FileInterceptor('profileImage'))
 	@Patch(':id')
-	update(@Param('id', ParseIntPipe) id: string, @Body() updateUserDto: UpdateUserDto) {
-		return this.usersService.update(+id, updateUserDto);
+	update(
+		@Param('id', ParseIntPipe) id: string,
+		@Body() updateUserDto: UpdateUserDto,
+		@UploadedFile() image?: any,
+	) {
+		return this.usersService.update(+id, updateUserDto, image);
 	}
 
 	@UseGuards(RolesGuard)
