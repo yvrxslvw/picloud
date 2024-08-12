@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { SequelizeModule } from '@nestjs/sequelize';
 import { ServeStaticModule } from '@nestjs/serve-static';
@@ -8,6 +8,7 @@ import { validate } from './env.validation';
 import { RolesModule } from './roles/roles.module';
 import { AuthModule } from './auth/auth.module';
 import { FilesModule } from './files/files.module';
+import { StaticFilesMiddleware } from './files/middlewares/static-files.middleware';
 
 const appEnv = process.env.NODE_ENV;
 const isDev = appEnv === 'development';
@@ -40,4 +41,10 @@ const envFilePath = ['.env', `.env.${appEnv}.local`, `.env.${appEnv}`];
 	controllers: [],
 	providers: [],
 })
-export class AppModule {}
+export class AppModule implements NestModule {
+	configure(consumer: MiddlewareConsumer) {
+		consumer
+			.apply(StaticFilesMiddleware)
+			.forRoutes('drives');
+	}
+}
