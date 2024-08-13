@@ -17,4 +17,9 @@
 	&:hover {
 		background-color: rgba($color: $accent_color, $alpha: 0.75);
 	}
+
+	&:disabled {
+		background-color: rgba($color: $dark_gray_color, $alpha: 0.5);
+		cursor: not-allowed;
+	}
 }

@@ -6,15 +6,14 @@ import cl from './style.module.scss';
 interface LoginFormWidgetProps {}
 
 export const LoginFormWidget: FC<LoginFormWidgetProps> = () => {
-	const [login, setLogin] = useState('');
-	const [password, setPassword] = useState('');
+	const [data, setData] = useState({ login: '', password: '' });
 
 	return (
 		<div className={cl.LoginForm}>
 			<LoginWindow
-				loginInput={<LoginInput login={login} setLogin={setLogin} />}
-				passwordInput={<PasswordInput password={password} setPassword={setPassword} />}
-				authButton={<AuthButton login={login} password={password} />}
+				loginInput={<LoginInput data={data} setData={setData} />}
+				passwordInput={<PasswordInput data={data} setData={setData} />}
+				authButton={<AuthButton data={data} />}
 			/>
 		</div>
 	);

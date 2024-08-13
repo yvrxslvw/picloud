@@ -18,7 +18,7 @@ export const baseQuery: BaseQueryFn<string | FetchArgs, unknown, FetchBaseQueryE
 ) => {
 	let response = await query(args, api, extraOptions);
 
-	if (response.error) {
+	if (response.error && response.error.status === 401) {
 		const refreshResponse = await query({ url: '/auth/refresh', method: 'POST' }, api, extraOptions);
 
 		if (

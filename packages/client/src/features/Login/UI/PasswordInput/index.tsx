@@ -2,14 +2,14 @@ import { ChangeEvent, Dispatch, FC, SetStateAction } from 'react';
 import { Input } from 'shared/UI';
 
 interface PasswordInputProps {
-	password: string;
-	setPassword: Dispatch<SetStateAction<string>>;
+	data: { login: string; password: string };
+	setData: Dispatch<SetStateAction<{ login: string; password: string }>>;
 }
 
-export const PasswordInput: FC<PasswordInputProps> = ({ password, setPassword }) => {
+export const PasswordInput: FC<PasswordInputProps> = ({ data, setData }) => {
 	const onChangeHandler = (e: ChangeEvent<HTMLInputElement>) => {
-		const value = e.target.value;
-		setPassword(value);
+		const password = e.target.value;
+		setData({ ...data, password });
 	};
 
 	return (
@@ -17,7 +17,7 @@ export const PasswordInput: FC<PasswordInputProps> = ({ password, setPassword })
 			label='Пароль'
 			placeholder='Введите Ваш пароль'
 			type='password'
-			value={password}
+			value={data.password}
 			onChange={onChangeHandler}
 		/>
 	);
