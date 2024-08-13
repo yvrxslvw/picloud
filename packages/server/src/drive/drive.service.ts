@@ -3,13 +3,23 @@ import { FilesService } from 'src/files/files.service';
 import { UsersService } from 'src/users/users.service';
 import { UploadFilesDto } from './dto/upload-files.dto';
 import { join } from 'path';
-import { Request } from 'express';
+import { Request, Response } from 'express';
 import { DeleteFilesDto } from './dto/delete-files.dto';
 import { CopyFilesDto } from './dto/copy-files.dto';
 
 @Injectable()
 export class DriveService {
 	constructor(private readonly usersService: UsersService, private readonly filesService: FilesService) {}
+
+	async readDir(request: Request, response: Response) {
+		const user = await this.usersService.findOneById(request['user'].id);
+		const path = request.url.split('/').slice(3).join('/');
+		if (!this.filesService.isExist(this.getFullDrivePath(user.id, decodeURI(path))))
+			throw new BadRequestException('Данной директории или файла не существует.');
+		const result = this.filesService.readDir(this.getFullDrivePath(user.id, decodeURI(path)));
+		if (Array.isArray(result)) return response.json(result);
+		else return response.redirect(result);
+	}
 
 	async uploadFiles(request: Request, uploadFilesDto: UploadFilesDto, files: Express.Multer.File[]) {
 		if (files.length === 0) throw new BadRequestException('Отсутствуют файлы для загрузки.');

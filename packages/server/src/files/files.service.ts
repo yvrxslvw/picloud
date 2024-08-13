@@ -1,4 +1,5 @@
 import { Injectable } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
 import {
 	existsSync,
 	mkdirSync,
@@ -15,6 +16,8 @@ import { resolve, join } from 'path';
 @Injectable()
 export class FilesService {
 	private readonly STATIC_PATH = resolve(__dirname, '..', 'static');
+
+	constructor(private readonly configService: ConfigService) {}
 
 	createFile(path: string, fileName: string, file: any) {
 		const filePath = resolve(this.STATIC_PATH, path);
@@ -70,6 +73,12 @@ export class FilesService {
 			recursiveSize(absPath);
 		} else totalSize = statSync(absPath).size;
 		return totalSize;
+	}
+
+	readDir(path: string) {
+		const absPath = resolve(this.STATIC_PATH, path);
+		if (statSync(absPath).isDirectory()) return readdirSync(absPath);
+		else return `${this.configService.get('APP_URL')}/${path}`;
 	}
 
 	private renameSyncRecursive(oldPath: string, newPath: string) {

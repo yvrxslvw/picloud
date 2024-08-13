@@ -1,15 +1,34 @@
-import { Body, Controller, Delete, Patch, Post, Req, UploadedFiles, UseGuards, UseInterceptors } from '@nestjs/common';
+import {
+	Body,
+	Controller,
+	Delete,
+	Get,
+	Param,
+	Patch,
+	Post,
+	Req,
+	Res,
+	UploadedFiles,
+	UseGuards,
+	UseInterceptors,
+} from '@nestjs/common';
 import { DriveService } from './drive.service';
 import { UploadFilesDto } from './dto/upload-files.dto';
 import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
 import { FilesInterceptor } from '@nestjs/platform-express';
-import { Request } from 'express';
+import { Request, Response } from 'express';
 import { DeleteFilesDto } from './dto/delete-files.dto';
 import { CopyFilesDto } from './dto/copy-files.dto';
 
 @Controller('drive')
 export class DriveController {
 	constructor(private readonly driveService: DriveService) {}
+
+	@UseGuards(JwtAuthGuard)
+	@Get(['', '*'])
+	readDir(@Req() request: Request, @Res() response: Response) {
+		return this.driveService.readDir(request, response);
+	}
 
 	@UseGuards(JwtAuthGuard)
 	@UseInterceptors(FilesInterceptor('files'))

@@ -45,8 +45,6 @@ const envFilePath = ['.env', `.env.${appEnv}.local`, `.env.${appEnv}`];
 })
 export class AppModule implements NestModule {
 	configure(consumer: MiddlewareConsumer) {
-		consumer
-			.apply(StaticFilesMiddleware)
-			.forRoutes('drives');
+		consumer.apply(StaticFilesMiddleware).forRoutes('drives');
 	}
 }
