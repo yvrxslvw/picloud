@@ -1,10 +1,11 @@
-import { BadRequestException, ForbiddenException, Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { FilesService } from 'src/files/files.service';
 import { UsersService } from 'src/users/users.service';
 import { UploadFilesDto } from './dto/upload-files.dto';
 import { join } from 'path';
 import { Request } from 'express';
 import { DeleteFilesDto } from './dto/delete-files.dto';
+import { CopyFilesDto } from './dto/copy-files.dto';
 
 @Injectable()
 export class DriveService {
@@ -17,7 +18,7 @@ export class DriveService {
 		let totalSize = files.map(file => file.size).reduce((acc, cur) => acc + cur, 0);
 		uploadPath = uploadPath.replace('\\', '/');
 		totalSize = +(totalSize / Math.pow(1024, 2)).toFixed(2);
-		if (user.usedSpace + totalSize > user.totalSpace) throw new ForbiddenException('У Вас недостаточно места.');
+		if (user.usedSpace + totalSize > user.totalSpace) throw new BadRequestException('У Вас недостаточно места.');
 		if (!this.isValidPath(uploadPath)) throw new BadRequestException('Некорректный путь загрузки файлов.');
 		files.forEach(file => {
 			const path = join(this.getFullDrivePath(user.id, uploadPath), file.originalname);
@@ -27,7 +28,8 @@ export class DriveService {
 		files.forEach(file => {
 			this.filesService.createFile(this.getFullDrivePath(user.id, uploadPath), file.originalname, file);
 		});
-		await this.usersService.update(user.id, { usedSpace: +(user.usedSpace + totalSize).toFixed(2) });
+		const usedSpace = +(user.usedSpace + totalSize).toFixed(2);
+		await this.usersService.update(user.id, { usedSpace });
 		await user.reload();
 		return user;
 	}
@@ -51,6 +53,26 @@ export class DriveService {
 		});
 		const usedSpace = user.usedSpace - totalSize < 0 ? 0 : +(user.usedSpace - totalSize).toFixed(2);
 		await this.usersService.update(user.id, { usedSpace });
+		await user.reload();
+		return user;
+	}
+
+	async copyFiles(request: Request, copyFilesDto: CopyFilesDto) {
+		let { source, dist } = copyFilesDto;
+		const user = await this.usersService.findOneById(request['user'].id);
+		source = source.replace('\\', '/');
+		dist = dist.replace('\\', '/');
+		if (!this.isValidPath(source)) throw new BadRequestException('Некорректный путь копирования.');
+		if (!this.isValidPath(dist)) throw new BadRequestException('Некорректный путь назначения.');
+		if (!this.filesService.isExist(this.getFullDrivePath(user.id, source)))
+			throw new BadRequestException(`Файла или директории по пути "${source}" не существует.`);
+		if (this.filesService.isExist(this.getFullDrivePath(user.id, dist)))
+			throw new BadRequestException(`Файл или директория по пути "${dist}" уже существует.`);
+		let size = +(this.filesService.getSize(this.getFullDrivePath(user.id, source)) / Math.pow(1024, 2)).toFixed(2);
+		if (user.usedSpace + size > user.totalSpace) throw new BadRequestException('У Вас недостаточно места.');
+		this.filesService.copy(this.getFullDrivePath(user.id, source), this.getFullDrivePath(user.id, dist));
+		const usedSpace = +(user.usedSpace + size).toFixed(2);
+		await user.update({ usedSpace });
 		await user.reload();
 		return user;
 	}

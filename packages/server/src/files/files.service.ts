@@ -46,7 +46,7 @@ export class FilesService {
 		const dPath = resolve(this.STATIC_PATH, destination);
 		if (!existsSync(sPath)) throw new Error('Файла или директории не существует.');
 		if (!existsSync(dPath.split('/').slice(0, -1).join('/')))
-			throw new Error('Директории по пути назначения не существует.');
+			mkdirSync(dPath.split('/').slice(0, -1).join('/'), { recursive: true });
 		if (statSync(sPath).isDirectory()) this.copyFileSyncRecursive(sPath, dPath);
 		else copyFileSync(sPath, dPath);
 	}
