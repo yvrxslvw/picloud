@@ -24,7 +24,13 @@ export const AuthApi = createApi({
 				body,
 			}),
 		}),
+		refresh: builder.query<LoginResponse, undefined>({
+			query: () => ({
+				url: '/auth/refresh',
+				method: 'POST',
+			}),
+		}),
 	}),
 });
 
-export const { useLoginMutation } = AuthApi;
+export const { useLoginMutation, useRefreshQuery } = AuthApi;

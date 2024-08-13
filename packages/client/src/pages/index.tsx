@@ -1,8 +1,10 @@
-import { FC } from 'react';
+import { FC, useEffect } from 'react';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import { Layout } from 'widgets/Layout';
-import { useAppSelector } from 'shared/hooks';
+import { useAppDispatch, useAppSelector } from 'shared/hooks';
 import { PrivateRoutes, PublicRoutes } from './routes';
+import { useRefreshQuery } from 'shared/api';
+import { UserSlice } from 'app/store';
 
 const PublicRouter = createBrowserRouter([
 	{
@@ -20,6 +22,14 @@ const PrivateRouter = createBrowserRouter([
 
 export const AppRouter: FC = () => {
 	const user = useAppSelector(state => state.user);
+	const { data, isLoading } = useRefreshQuery(undefined);
+	const { login } = UserSlice.actions;
+	const dispatch = useAppDispatch();
 
+	useEffect(() => {
+		if (data) dispatch(login(data));
+	}, [data]);
+
+	if (isLoading) return;
 	return <RouterProvider router={user.isLogged ? PrivateRouter : PublicRouter} />;
 };
