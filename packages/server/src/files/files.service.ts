@@ -16,10 +16,6 @@ import { resolve, join } from 'path';
 export class FilesService {
 	private readonly STATIC_PATH = resolve(__dirname, '..', 'static');
 
-	constructor() {
-		if (!existsSync(this.STATIC_PATH)) mkdirSync(this.STATIC_PATH);
-	}
-
 	createFile(path: string, fileName: string, file: any) {
 		const filePath = resolve(this.STATIC_PATH, path);
 		if (!existsSync(filePath)) mkdirSync(filePath, { recursive: true });
@@ -53,6 +49,11 @@ export class FilesService {
 			throw new Error('Директории по пути назначения не существует.');
 		if (statSync(sPath).isDirectory()) this.copyFileSyncRecursive(sPath, dPath);
 		else copyFileSync(sPath, dPath);
+	}
+
+	isExist(path: string) {
+		const aPath = resolve(this.STATIC_PATH, path);
+		return existsSync(aPath);
 	}
 
 	private renameSyncRecursive(oldPath: string, newPath: string) {

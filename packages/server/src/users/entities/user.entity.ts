@@ -21,10 +21,10 @@ export class User extends Model<User, UserCreationAttributes> {
 	@Column({ type: DataType.STRING(40), unique: true })
 	declare profileImage: string;
 
-	@Column({ type: DataType.DOUBLE, allowNull: false, defaultValue: 0.0 })
+	@Column({ type: DataType.DOUBLE, allowNull: false, defaultValue: 0 })
 	declare usedSpace: number;
 
-	@Column({ type: DataType.DOUBLE, allowNull: false, defaultValue: 15.0 })
+	@Column({ type: DataType.DOUBLE, allowNull: false, defaultValue: 15 * Math.pow(1024, 1) })
 	declare totalSpace: number;
 
 	declare createdAt: Date;

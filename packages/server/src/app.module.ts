@@ -9,6 +9,7 @@ import { RolesModule } from './roles/roles.module';
 import { AuthModule } from './auth/auth.module';
 import { FilesModule } from './files/files.module';
 import { StaticFilesMiddleware } from './files/middlewares/static-files.middleware';
+import { DriveModule } from './drive/drive.module';
 
 const appEnv = process.env.NODE_ENV;
 const isDev = appEnv === 'development';
@@ -37,6 +38,7 @@ const envFilePath = ['.env', `.env.${appEnv}.local`, `.env.${appEnv}`];
 		RolesModule,
 		AuthModule,
 		FilesModule,
+		DriveModule,
 	],
 	controllers: [],
 	providers: [],
