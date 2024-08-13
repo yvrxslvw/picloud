@@ -7,6 +7,7 @@ import { Request, Response } from 'express';
 import { DeleteFilesDto } from './dto/delete-files.dto';
 import { CopyFilesDto } from './dto/copy-files.dto';
 import { MoveFilesDto } from './dto/move-files.dto';
+import { CreateFolderDto } from './dto/create-folder.dto';
 
 @Injectable()
 export class DriveService {
@@ -39,6 +40,18 @@ export class DriveService {
 		files.forEach(file => {
 			this.filesService.createFile(this.getFullDrivePath(user.id, uploadPath), file.originalname, file);
 		});
+		const usedSpace = +(this.filesService.getSize(this.getFullDrivePath(user.id, '')) / Math.pow(1024, 2)).toFixed(2);
+		await user.update({ usedSpace });
+		await user.reload();
+		return user;
+	}
+
+	async createFolder(request: Request, createFolderDto: CreateFolderDto) {
+		const { path } = createFolderDto;
+		const user = await this.usersService.findOneById(request['user'].id);
+		if (this.filesService.isExist(this.getFullDrivePath(user.id, path)))
+			throw new BadRequestException(`Директория по пути ${path} уже существует.`);
+		this.filesService.createFolder(this.getFullDrivePath(user.id, path));
 		const usedSpace = +(this.filesService.getSize(this.getFullDrivePath(user.id, '')) / Math.pow(1024, 2)).toFixed(2);
 		await user.update({ usedSpace });
 		await user.reload();

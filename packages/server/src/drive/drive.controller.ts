@@ -21,6 +21,7 @@ import { Request, Response } from 'express';
 import { DeleteFilesDto } from './dto/delete-files.dto';
 import { CopyFilesDto } from './dto/copy-files.dto';
 import { MoveFilesDto } from './dto/move-files.dto';
+import { CreateFolderDto } from './dto/create-folder.dto';
 
 @Controller('drive')
 export class DriveController {
@@ -41,6 +42,12 @@ export class DriveController {
 		@UploadedFiles() files: Express.Multer.File[],
 	) {
 		return this.driveService.uploadFiles(request, uploadFilesDto, files);
+	}
+
+	@UseGuards(JwtAuthGuard)
+	@Post('folder')
+	createFolder(@Req() request: Request, @Body() createFolderDto: CreateFolderDto) {
+		return this.driveService.createFolder(request, createFolderDto);
 	}
 
 	@UseGuards(JwtAuthGuard)
