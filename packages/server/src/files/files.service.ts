@@ -77,8 +77,20 @@ export class FilesService {
 
 	readDir(path: string) {
 		const absPath = resolve(this.STATIC_PATH, path);
-		if (statSync(absPath).isDirectory()) return readdirSync(absPath);
-		else return `${this.configService.get('APP_URL')}/${path}`;
+		const result = [];
+		if (statSync(absPath).isDirectory()) {
+			readdirSync(absPath).forEach(file => {
+				const path = join(absPath, file);
+				const obj = {
+					isFolder: statSync(path).isDirectory(),
+					name: file,
+					modifyTime: statSync(path).mtime,
+					size: +(statSync(path).size / Math.pow(1024, 2)).toFixed(2),
+				};
+				result.push(obj);
+			});
+			return result;
+		} else return `${this.configService.get('APP_URL')}/${path}`;
 	}
 
 	private renameSyncRecursive(oldPath: string, newPath: string) {
