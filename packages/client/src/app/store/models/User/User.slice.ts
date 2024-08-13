@@ -4,12 +4,21 @@ import { login, logout } from './User.actions';
 
 export interface UserState {
 	isLogged: boolean;
-	userInfo: IUser | null;
+	userInfo: IUser;
 }
 
 const initialState: UserState = {
 	isLogged: false,
-	userInfo: null,
+	userInfo: {
+		id: -1,
+		login: '',
+		password: '',
+		profileImage: '',
+		createdAt: '',
+		usedSpace: 0,
+		totalSpace: 0,
+		roles: [],
+	},
 };
 
 export const UserSlice = createSlice({

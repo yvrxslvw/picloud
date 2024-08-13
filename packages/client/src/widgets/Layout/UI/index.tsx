@@ -1,27 +1,29 @@
 import { FC } from 'react';
 import { Outlet } from 'react-router-dom';
+import { Popup } from 'entities/Popup';
 import { Footer, Header } from 'entities/Layout';
+import { API_URL } from 'shared/constants';
 import { useAppSelector } from 'shared/hooks';
+import { convertFileSize } from 'shared/utils';
 import { ProfileImageDropdown } from 'features/HeaderAccount';
 import cl from './style.module.scss';
-import { Popup } from 'entities/Popup';
 
 interface LayoutProps {}
 
 export const Layout: FC<LayoutProps> = () => {
 	const { isLogged, userInfo } = useAppSelector(state => state.user);
 	const { popups } = useAppSelector(state => state.popup);
-	const usedSpacePercentage = userInfo ? (userInfo.usedSpace / userInfo.totalSpace) * 100 : 0;
+	const usedSpacePercentage = (userInfo.usedSpace / userInfo.totalSpace) * 100;
 
 	return (
 		<div className={cl.Layout}>
 			<Header
 				isLogged={isLogged}
-				usedSpace={userInfo?.usedSpace.toFixed(2)}
+				usedSpace={convertFileSize(userInfo.usedSpace)}
 				usedSpacePercentage={usedSpacePercentage}
-				totalSpace={userInfo?.totalSpace.toFixed(2)}
+				totalSpace={convertFileSize(userInfo.totalSpace)}
 				isNotEnoughSpace={usedSpacePercentage >= 80}
-				profileImageDropdown={<ProfileImageDropdown imageLink={userInfo?.profileImage} />}
+				profileImageDropdown={<ProfileImageDropdown imageLink={`${API_URL}/images/${userInfo.profileImage}`} />}
 			/>
 			<main>
 				<Outlet />
