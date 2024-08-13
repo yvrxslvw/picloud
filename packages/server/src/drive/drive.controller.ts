@@ -6,6 +6,7 @@ import {
 	Param,
 	Patch,
 	Post,
+	Put,
 	Req,
 	Res,
 	UploadedFiles,
@@ -19,6 +20,7 @@ import { FilesInterceptor } from '@nestjs/platform-express';
 import { Request, Response } from 'express';
 import { DeleteFilesDto } from './dto/delete-files.dto';
 import { CopyFilesDto } from './dto/copy-files.dto';
+import { MoveFilesDto } from './dto/move-files.dto';
 
 @Controller('drive')
 export class DriveController {
@@ -51,5 +53,11 @@ export class DriveController {
 	@Patch()
 	copyFiles(@Req() request: Request, @Body() copyFilesDto: CopyFilesDto) {
 		return this.driveService.copyFiles(request, copyFilesDto);
+	}
+
+	@UseGuards(JwtAuthGuard)
+	@Put()
+	moveFiles(@Req() request: Request, @Body() moveFilesDto: MoveFilesDto) {
+		return this.driveService.moveFiles(request, moveFilesDto);
 	}
 }

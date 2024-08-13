@@ -6,6 +6,7 @@ import { join } from 'path';
 import { Request, Response } from 'express';
 import { DeleteFilesDto } from './dto/delete-files.dto';
 import { CopyFilesDto } from './dto/copy-files.dto';
+import { MoveFilesDto } from './dto/move-files.dto';
 
 @Injectable()
 export class DriveService {
@@ -38,8 +39,8 @@ export class DriveService {
 		files.forEach(file => {
 			this.filesService.createFile(this.getFullDrivePath(user.id, uploadPath), file.originalname, file);
 		});
-		const usedSpace = +(user.usedSpace + totalSize).toFixed(2);
-		await this.usersService.update(user.id, { usedSpace });
+		const usedSpace = +(this.filesService.getSize(this.getFullDrivePath(user.id, '')) / Math.pow(1024, 2)).toFixed(2);
+		await user.update({ usedSpace });
 		await user.reload();
 		return user;
 	}
@@ -61,8 +62,8 @@ export class DriveService {
 			const fullPath = this.getFullDrivePath(user.id, path);
 			this.filesService.remove(fullPath);
 		});
-		const usedSpace = user.usedSpace - totalSize < 0 ? 0 : +(user.usedSpace - totalSize).toFixed(2);
-		await this.usersService.update(user.id, { usedSpace });
+		const usedSpace = +(this.filesService.getSize(this.getFullDrivePath(user.id, '')) / Math.pow(1024, 2)).toFixed(2);
+		await user.update({ usedSpace });
 		await user.reload();
 		return user;
 	}
@@ -81,7 +82,25 @@ export class DriveService {
 		let size = +(this.filesService.getSize(this.getFullDrivePath(user.id, source)) / Math.pow(1024, 2)).toFixed(2);
 		if (user.usedSpace + size > user.totalSpace) throw new BadRequestException('У Вас недостаточно места.');
 		this.filesService.copy(this.getFullDrivePath(user.id, source), this.getFullDrivePath(user.id, dist));
-		const usedSpace = +(user.usedSpace + size).toFixed(2);
+		const usedSpace = +(this.filesService.getSize(this.getFullDrivePath(user.id, '')) / Math.pow(1024, 2)).toFixed(2);
+		await user.update({ usedSpace });
+		await user.reload();
+		return user;
+	}
+
+	async moveFiles(request: Request, moveFilesDto: MoveFilesDto) {
+		let { source, dist } = moveFilesDto;
+		const user = await this.usersService.findOneById(request['user'].id);
+		source = source.replace('\\', '/');
+		dist = dist.replace('\\', '/');
+		if (!this.isValidPath(source)) throw new BadRequestException('Некорректный путь перемещения.');
+		if (!this.isValidPath(dist)) throw new BadRequestException('Некорректный путь назначения.');
+		if (!this.filesService.isExist(this.getFullDrivePath(user.id, source)))
+			throw new BadRequestException(`Файла или директории по пути "${source}" не существует.`);
+		if (this.filesService.isExist(this.getFullDrivePath(user.id, dist)))
+			throw new BadRequestException(`Файл или директория по пути "${dist}" уже существует.`);
+		this.filesService.move(this.getFullDrivePath(user.id, source), this.getFullDrivePath(user.id, dist));
+		const usedSpace = +(this.filesService.getSize(this.getFullDrivePath(user.id, '')) / Math.pow(1024, 2)).toFixed(2);
 		await user.update({ usedSpace });
 		await user.reload();
 		return user;
