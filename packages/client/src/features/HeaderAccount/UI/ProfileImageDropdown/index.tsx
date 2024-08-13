@@ -1,8 +1,10 @@
-import React, { FC } from 'react';
+import React, { FC, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Dropdown } from 'shared/UI';
 import { ROUTER_PATHS } from 'shared/constants';
-import { usePopup } from 'entities/Popup';
+import { useLogoutMutation } from 'shared/api';
+import { UserSlice } from 'app/store';
+import { useAppDispatch } from 'shared/hooks';
 
 interface ProfileImageDropdownProps {
 	imageLink: string | undefined;
@@ -10,7 +12,9 @@ interface ProfileImageDropdownProps {
 
 export const ProfileImageDropdown: FC<ProfileImageDropdownProps> = ({ imageLink }) => {
 	const navigate = useNavigate();
-	const { createPopup } = usePopup();
+	const [logoutUser, { isSuccess }] = useLogoutMutation();
+	const { logout } = UserSlice.actions;
+	const dispatch = useAppDispatch();
 
 	const onClickDriveHandler = () => {
 		navigate(ROUTER_PATHS.DRIVE_PAGE);
@@ -21,12 +25,16 @@ export const ProfileImageDropdown: FC<ProfileImageDropdownProps> = ({ imageLink 
 	};
 
 	const onClickLogoutHandler = () => {
-		createPopup('logout');
+		logoutUser(null);
 	};
 
 	const onDragHandler = (e: React.DragEvent) => {
 		e.preventDefault();
 	};
+
+	useEffect(() => {
+		if (isSuccess) dispatch(logout());
+	}, [isSuccess]);
 
 	return (
 		<Dropdown.Root mainElement={<img src={imageLink} alt='profile' onDragStart={onDragHandler} />}>

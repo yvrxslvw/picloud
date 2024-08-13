@@ -22,7 +22,7 @@ const PrivateRouter = createBrowserRouter([
 
 export const AppRouter: FC = () => {
 	const user = useAppSelector(state => state.user);
-	const { data, isLoading } = useRefreshQuery(undefined);
+	const { data, isLoading } = useRefreshQuery(null);
 	const { login } = UserSlice.actions;
 	const dispatch = useAppDispatch();
 

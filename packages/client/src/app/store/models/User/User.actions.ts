@@ -22,4 +22,5 @@ export const logout = (state: State) => {
 		totalSpace: 0,
 		roles: [],
 	};
+	window.localStorage.removeItem('accessToken');
 };
