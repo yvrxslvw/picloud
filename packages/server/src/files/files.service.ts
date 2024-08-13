@@ -52,8 +52,24 @@ export class FilesService {
 	}
 
 	isExist(path: string) {
-		const aPath = resolve(this.STATIC_PATH, path);
-		return existsSync(aPath);
+		const absPath = resolve(this.STATIC_PATH, path);
+		return existsSync(absPath);
+	}
+
+	getSize(path: string) {
+		const absPath = resolve(this.STATIC_PATH, path);
+		let totalSize = 0;
+		if (statSync(absPath).isDirectory()) {
+			const recursiveSize = (folder: string) => {
+				readdirSync(folder).forEach(file => {
+					const filePath = join(folder, file);
+					const stat = statSync(filePath);
+					stat.isDirectory() ? recursiveSize(filePath) : (totalSize += stat.size);
+				});
+			};
+			recursiveSize(absPath);
+		} else totalSize = statSync(absPath).size;
+		return totalSize;
 	}
 
 	private renameSyncRecursive(oldPath: string, newPath: string) {
