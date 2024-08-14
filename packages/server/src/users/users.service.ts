@@ -44,7 +44,7 @@ export class UsersService {
 		return user;
 	}
 
-	async update(id: number, updateUserDto: UpdateUserDto, image?: any) {
+	async update(id: number, updateUserDto: UpdateUserDto, image?: Express.Multer.File) {
 		const user = await this.findOneById(id);
 		const { login, password, usedSpace, totalSpace } = updateUserDto;
 		if (login && login !== user.login && (await this.isUserExist(login)))

@@ -1,4 +1,4 @@
-import { ForbiddenException, HttpCode, HttpStatus, Injectable } from '@nestjs/common';
+import { ForbiddenException, HttpStatus, Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
 import { Request, Response } from 'express';
@@ -7,6 +7,7 @@ import { User } from 'src/users/entities/user.entity';
 import { UsersService } from 'src/users/users.service';
 import { LoginDto } from './dto/login.dto';
 import { RegisterDto } from './dto/register.dto';
+import { UpdateDto } from './dto/update.dto';
 
 @Injectable()
 export class AuthService {
@@ -49,6 +50,15 @@ export class AuthService {
 		} catch (_) {
 			throw new ForbiddenException('Нет доступа.');
 		}
+	}
+
+	async update(request: Request, updateUserDto: UpdateDto, image?: Express.Multer.File) {
+		const user = await this.usersService.findOneById(request['user'].id);
+		const { login, password } = updateUserDto;
+		const hash = password ? await bcrypt.hash(password, 10) : undefined;
+		await this.usersService.update(user.id, { login, password: hash }, image);
+		await user.reload();
+		return user;
 	}
 
 	private async generateToken(user: User, response: Response): Promise<string> {

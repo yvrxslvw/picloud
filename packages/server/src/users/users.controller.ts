@@ -51,7 +51,7 @@ export class UsersController {
 	update(
 		@Param('id', ParseIntPipe) id: string,
 		@Body() updateUserDto: UpdateUserDto,
-		@UploadedFile() image?: any,
+		@UploadedFile() image?: Express.Multer.File,
 	) {
 		return this.usersService.update(+id, updateUserDto, image);
 	}
