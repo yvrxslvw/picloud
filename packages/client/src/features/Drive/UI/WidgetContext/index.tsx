@@ -2,7 +2,7 @@ import { ChangeEvent, FC, RefObject, useEffect } from 'react';
 import { Context, FileLoader } from 'shared/UI';
 import { usePopup } from 'entities/Popup';
 import cl from './style.module.scss';
-import { useAddFilesMutation } from 'shared/api';
+import { useAddFilesMutation, useCreateFolderMutation } from 'shared/api';
 import { useLocation } from 'react-router-dom';
 import { useAppDispatch } from 'shared/hooks';
 import { UserSlice } from 'app/store';
@@ -15,13 +15,15 @@ interface WidgetContextProps {
 
 export const WidgetContext: FC<WidgetContextProps> = ({ widgetContextRef, filesRefetch }) => {
 	const { createPopup } = usePopup();
-	const [addFile, { data, error }] = useAddFilesMutation();
+	const [addFile, { data: addFileData, error: addFileError }] = useAddFilesMutation();
+	const [createFolder, { data: createFolderData, error: createFolderError }] = useCreateFolderMutation();
 	const path = decodeURI(useLocation().pathname).split('/').slice(2).join('/');
 	const { update } = UserSlice.actions;
 	const dispatch = useAppDispatch();
 
 	const onCreateFolderHandler = () => {
-		createPopup('create folder');
+		const folderName = 'Тут я сделаю имя потом';
+		createFolder(path ? `${path}/${folderName}` : folderName);
 	};
 
 	const onChangeHandler = (e: ChangeEvent<HTMLInputElement>): boolean => {
@@ -35,15 +37,26 @@ export const WidgetContext: FC<WidgetContextProps> = ({ widgetContextRef, filesR
 	};
 
 	useEffect(() => {
-		if (data) {
-			dispatch(update(data));
+		if (addFileData) {
+			dispatch(update(addFileData));
 			filesRefetch();
 		}
-	}, [data]);
+	}, [addFileData]);
 
 	useEffect(() => {
-		if (isServerError(error)) createPopup(error.data.message);
-	}, [error]);
+		if (isServerError(addFileError)) createPopup(addFileError.data.message);
+	}, [addFileError]);
+
+	useEffect(() => {
+		if (createFolderData) {
+			dispatch(update(createFolderData));
+			filesRefetch();
+		}
+	}, [createFolderData]);
+
+	useEffect(() => {
+		if (isServerError(createFolderError)) createPopup(createFolderError.data.message);
+	}, [createFolderError]);
 
 	return (
 		<Context.Menu className={cl.WidgetContext} ref={widgetContextRef}>

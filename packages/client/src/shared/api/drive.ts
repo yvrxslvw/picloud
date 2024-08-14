@@ -29,7 +29,16 @@ export const DriveApi = createApi({
 				},
 			}),
 		}),
+		createFolder: builder.mutation<IUser, string>({
+			query: path => ({
+				url: '/drive/folder',
+				method: 'POST',
+				body: {
+					path,
+				},
+			}),
+		}),
 	}),
 });
 
-export const { useReadQuery, useAddFilesMutation, useDeleteFilesMutation } = DriveApi;
+export const { useReadQuery, useAddFilesMutation, useDeleteFilesMutation, useCreateFolderMutation } = DriveApi;

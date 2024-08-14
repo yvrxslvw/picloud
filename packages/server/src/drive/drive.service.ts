@@ -51,7 +51,7 @@ export class DriveService {
 		const user = await this.getUser(request);
 		const fullPath = this.getFullDrivePath(user.id, path);
 		if (this.filesService.isExist(fullPath))
-			throw new BadRequestException(`Директория по пути ${path} уже существует.`);
+			throw new BadRequestException(`Директория по пути "${path}" уже существует.`);
 		this.filesService.createFolder(fullPath);
 		return this.recalculateSpace(user);
 	}
