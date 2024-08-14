@@ -18,7 +18,10 @@ export const DriveMainWidget: FC<DriveMainWidgetProps> = ({ path, className, ...
 	const { data } = useReadQuery(crumbs);
 
 	useEffect(() => {
-		if (data) setFiles(data);
+		if (data) {
+			setFiles(data);
+			setFiles(prev => prev.toSorted((a, b) => +a.isFolder + +b.isFolder));
+		}
 	}, [data]);
 
 	return (
