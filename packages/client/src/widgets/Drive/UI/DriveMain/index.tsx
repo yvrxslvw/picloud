@@ -9,6 +9,7 @@ import { useContextMenu } from 'widgets/Drive/lib';
 import cl from './style.module.scss';
 import { CreateFolderModal } from '../CreateFolderModal';
 import { RenameFileModal } from '../RenameFileModal';
+import { DropFilesWidget } from '../DropFiles';
 
 interface DriveMainWidgetProps extends HTMLAttributes<HTMLDivElement> {
 	path: string;
@@ -23,7 +24,7 @@ export const DriveMainWidget: FC<DriveMainWidgetProps> = ({ path, className, ...
 	const { data, refetch } = useReadQuery(crumbs, { refetchOnMountOrArgChange: true });
 
 	useEffect(() => {
-		if (data) setFiles(data.toSorted((a, b) => +a.isFolder + +b.isFolder));
+		if (data) setFiles(data.toSorted((a, b) => +b.isFolder - +a.isFolder));
 	}, [data]);
 
 	return (
@@ -49,6 +50,8 @@ export const DriveMainWidget: FC<DriveMainWidgetProps> = ({ path, className, ...
 					))}
 				</tbody>
 			</Table>
+
+			<DropFilesWidget filesRefetch={refetch} />
 
 			<AddFileButton filesRefetch={refetch} />
 			<WidgetContext

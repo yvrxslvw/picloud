@@ -4,12 +4,21 @@ import { faFileCirclePlus } from '@fortawesome/free-solid-svg-icons';
 import cn from 'classnames';
 import { usePopup } from 'entities/Popup';
 import cl from './style.module.scss';
+import { useAddFilesMutation } from 'shared/api';
+import { useAppDispatch } from 'shared/hooks';
+import { UserSlice } from 'app/store';
+import { isServerError } from 'shared/utils';
 
-interface DropFilesWidgetProps extends HTMLAttributes<HTMLDivElement> {}
+interface DropFilesWidgetProps extends HTMLAttributes<HTMLDivElement> {
+	filesRefetch: () => void;
+}
 
-export const DropFilesWidget: FC<DropFilesWidgetProps> = ({ className, style, ...props }) => {
+export const DropFilesWidget: FC<DropFilesWidgetProps> = ({ filesRefetch, className, style, ...props }) => {
 	const [display, setDisplay] = useState('none');
 	const { createPopup } = usePopup();
+	const [addFile, { data, error }] = useAddFilesMutation();
+	const { update } = UserSlice.actions;
+	const dispatch = useAppDispatch();
 
 	const preventDefaults = (e: DragEvent) => {
 		e.preventDefault();
@@ -22,10 +31,11 @@ export const DropFilesWidget: FC<DropFilesWidgetProps> = ({ className, style, ..
 
 	const onDropHandler = (e: DragEvent) => {
 		if (!e.dataTransfer) return;
-		const files = e.dataTransfer.files;
-		const str = [];
-		for (const file of files) str.push(file.name);
-		createPopup(str.join(', '));
+		const uploadedFiles = e.dataTransfer.files;
+		const formData = new FormData();
+		for (const file of uploadedFiles) formData.append('files', file);
+		formData.append('uploadPath', decodeURI(window.location.pathname.split('/').slice(2).join('/')));
+		addFile(formData);
 	};
 
 	useEffect(() => {
@@ -53,6 +63,18 @@ export const DropFilesWidget: FC<DropFilesWidgetProps> = ({ className, style, ..
 			document.body.removeEventListener('drop', onDropHandler, false);
 		};
 	}, []);
+
+	useEffect(() => {
+		if (data) {
+			dispatch(update(data));
+			filesRefetch();
+			createPopup('Успешно загружено!');
+		}
+	}, [data]);
+
+	useEffect(() => {
+		if (isServerError(error)) createPopup(error.data.message);
+	}, [error]);
 
 	return (
 		<div className={cn(cl.DropFilesWidget, className)} style={{ ...style, display }} {...props}>

@@ -39,7 +39,7 @@ export const WidgetContext: FC<WidgetContextProps> = ({ widgetContextRef, filesR
 		if (addFileData) {
 			dispatch(update(addFileData));
 			filesRefetch();
-			createPopup('Файл успешно загружен.');
+			createPopup('Успешно загружено!');
 		}
 	}, [addFileData]);
 
