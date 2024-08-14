@@ -1,4 +1,4 @@
-import { FC, RefObject, useEffect } from 'react';
+import { Dispatch, FC, RefObject, SetStateAction, useEffect } from 'react';
 import { Context } from 'shared/UI';
 import { IFile } from 'shared/models';
 import { usePopup } from 'entities/Popup';
@@ -13,9 +13,15 @@ interface FileContextProps {
 	fileContextRef: RefObject<HTMLUListElement>;
 	selectedFile: IFile | undefined;
 	filesRefetch: () => void;
+	showRenameFileModal: Dispatch<SetStateAction<boolean>>;
 }
 
-export const FileContext: FC<FileContextProps> = ({ fileContextRef, selectedFile, filesRefetch }) => {
+export const FileContext: FC<FileContextProps> = ({
+	fileContextRef,
+	selectedFile,
+	filesRefetch,
+	showRenameFileModal,
+}) => {
 	const { createPopup } = usePopup();
 	const [deleteFiles, { data, error }] = useDeleteFilesMutation();
 	const { update } = UserSlice.actions;
@@ -23,7 +29,7 @@ export const FileContext: FC<FileContextProps> = ({ fileContextRef, selectedFile
 	const path = decodeURI(useLocation().pathname).split('/').slice(2).join('/');
 
 	const onRenameHandler = () => {
-		createPopup('rename ' + selectedFile?.name);
+		showRenameFileModal(true);
 	};
 
 	const onDeleteHandler = () => {

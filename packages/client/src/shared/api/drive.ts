@@ -2,6 +2,11 @@ import { createApi } from '@reduxjs/toolkit/query/react';
 import { IFile, IUser } from 'shared/models';
 import { baseQuery } from './baseQuery';
 
+export interface MoveFilesRequest {
+	source: string;
+	dist: string;
+}
+
 export const DriveApi = createApi({
 	reducerPath: 'api/drive',
 	tagTypes: ['drive'],
@@ -38,7 +43,20 @@ export const DriveApi = createApi({
 				},
 			}),
 		}),
+		moveFiles: builder.mutation<IUser, MoveFilesRequest>({
+			query: body => ({
+				url: '/drive',
+				method: 'PUT',
+				body,
+			}),
+		}),
 	}),
 });
 
-export const { useReadQuery, useAddFilesMutation, useDeleteFilesMutation, useCreateFolderMutation } = DriveApi;
+export const {
+	useReadQuery,
+	useAddFilesMutation,
+	useDeleteFilesMutation,
+	useCreateFolderMutation,
+	useMoveFilesMutation,
+} = DriveApi;

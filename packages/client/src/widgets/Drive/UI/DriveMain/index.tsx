@@ -8,6 +8,7 @@ import { AddFileButton, FileContext, FileFeature, WidgetContext } from 'features
 import { useContextMenu } from 'widgets/Drive/lib';
 import cl from './style.module.scss';
 import { CreateFolderModal } from '../CreateFolderModal';
+import { RenameFileModal } from '../RenameFileModal';
 
 interface DriveMainWidgetProps extends HTMLAttributes<HTMLDivElement> {
 	path: string;
@@ -18,6 +19,7 @@ export const DriveMainWidget: FC<DriveMainWidgetProps> = ({ path, className, ...
 	const { widgetRef, widgetContextRef, fileContextRef, setSelectedFile, selectedFile } = useContextMenu();
 	const [files, setFiles] = useState<IFile[]>([]);
 	const [isCreateFolderModalShown, setIsCreateFolderModalShown] = useState(false);
+	const [isRenameFileModalShown, setIsRenameFileModalShown] = useState(false);
 	const { data, refetch } = useReadQuery(crumbs, { refetchOnMountOrArgChange: true });
 
 	useEffect(() => {
@@ -54,11 +56,22 @@ export const DriveMainWidget: FC<DriveMainWidgetProps> = ({ path, className, ...
 				filesRefetch={refetch}
 				showCreateFolderModal={setIsCreateFolderModalShown}
 			/>
-			<FileContext fileContextRef={fileContextRef} selectedFile={selectedFile} filesRefetch={refetch} />
+			<FileContext
+				fileContextRef={fileContextRef}
+				selectedFile={selectedFile}
+				filesRefetch={refetch}
+				showRenameFileModal={setIsRenameFileModalShown}
+			/>
 
 			<CreateFolderModal
 				isShown={isCreateFolderModalShown}
 				setIsShown={setIsCreateFolderModalShown}
+				filesRefetch={refetch}
+			/>
+			<RenameFileModal
+				selected={selectedFile}
+				isShown={isRenameFileModalShown}
+				setIsShown={setIsRenameFileModalShown}
 				filesRefetch={refetch}
 			/>
 		</div>

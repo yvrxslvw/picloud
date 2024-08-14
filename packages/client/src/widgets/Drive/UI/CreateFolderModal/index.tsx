@@ -52,12 +52,12 @@ export const CreateFolderModal: FC<CreateFolderModalProps> = ({ isShown, setIsSh
 	return (
 		isShown && (
 			<ModalWindow title='Создание папки' onClose={onCloseHandler}>
-				<div className={cl.ModalContent}>
+				<form className={cl.ModalContent} onSubmit={e => e.preventDefault()}>
 					<Input label='Название папки' value={folderName} onChange={onChangeHandler} />
 					<Button onClick={onClickHandler} loading={isLoading}>
 						Создать папку
 					</Button>
-				</div>
+				</form>
 			</ModalWindow>
 		)
 	);
