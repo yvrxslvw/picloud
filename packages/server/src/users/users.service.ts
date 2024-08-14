@@ -22,6 +22,7 @@ export class UsersService {
 		const user = await this.userRepo.create({ login, password }, { include: { all: true, nested: true } });
 		const role = await this.rolesService.findOneByTag('USER');
 		if (role) await user.$set('roles', [role.id]);
+		this.filesService.createFolder(`drives/${user.id}`);
 		await user.reload();
 		return user;
 	}
