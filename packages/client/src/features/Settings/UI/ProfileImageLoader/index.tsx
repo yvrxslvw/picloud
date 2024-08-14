@@ -4,10 +4,11 @@ import cl from './style.module.scss';
 import { usePopup } from 'entities/Popup';
 
 interface ProfileImageLoaderProps {
-	setImage: Dispatch<SetStateAction<File | null>>;
+	data: { image: File | null; login: string; password: string; passwordConfirm: string };
+	setData: Dispatch<SetStateAction<{ image: File | null; login: string; password: string; passwordConfirm: string }>>;
 }
 
-export const ProfileImageLoader: FC<ProfileImageLoaderProps> = ({ setImage }) => {
+export const ProfileImageLoader: FC<ProfileImageLoaderProps> = ({ data, setData }) => {
 	const { createPopup } = usePopup();
 	const [previewSrc, setPreviewSrc] = useState('');
 
@@ -23,7 +24,7 @@ export const ProfileImageLoader: FC<ProfileImageLoaderProps> = ({ setImage }) =>
 			if (!e.target || typeof e.target.result !== 'string') return;
 			setPreviewSrc(e.target.result);
 		};
-		setImage(image);
+		setData({ ...data, image });
 		reader.readAsDataURL(image);
 		return true;
 	};

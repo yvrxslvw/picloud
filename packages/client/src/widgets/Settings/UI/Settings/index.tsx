@@ -9,23 +9,25 @@ interface SettingsWidgetProps {}
 
 export const SettingsWidget: FC<SettingsWidgetProps> = () => {
 	const { userInfo } = useAppSelector(state => state.user);
-	const [image, setImage] = useState<File | null>(null);
-	const [login, setLogin] = useState(userInfo.login);
-	const [password, setPassword] = useState('');
-	const [passwordConfirm, setPasswordConfirm] = useState('');
+	const [data, setData] = useState<{ image: File | null; login: string; password: string; passwordConfirm: string }>({
+		image: null,
+		login: userInfo.login,
+		password: '',
+		passwordConfirm: '',
+	});
 
 	return (
 		<div className={cl.SettingsWidget}>
 			<div className={cl.Container}>
 				<section>
-					<ProfileImageLoader setImage={setImage} />
+					<ProfileImageLoader data={data} setData={setData} />
 				</section>
 				<section>
-					<LoginInput login={login} setLogin={setLogin} />
+					<LoginInput data={data} setData={setData} />
 				</section>
 				<section>
-					<PasswordInput password={password} setPassword={setPassword} />
-					<PasswordConfirmInput passwordConfirm={passwordConfirm} setPasswordConfirm={setPasswordConfirm} />
+					<PasswordInput data={data} setData={setData} />
+					<PasswordConfirmInput data={data} setData={setData} />
 				</section>
 				<section>
 					<Text dark>
@@ -33,7 +35,7 @@ export const SettingsWidget: FC<SettingsWidgetProps> = () => {
 					</Text>
 				</section>
 				<section>
-					<SaveButton image={image} login={login} password={password} passwordConfirm={passwordConfirm} />
+					<SaveButton data={data} setData={setData} />
 				</section>
 			</div>
 		</div>

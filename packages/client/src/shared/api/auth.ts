@@ -37,6 +37,13 @@ export const AuthApi = createApi({
 				method: 'POST',
 			}),
 		}),
+		update: builder.mutation<IUser, FormData>({
+			query: body => ({
+				url: '/auth/update',
+				method: 'PATCH',
+				body,
+			}),
+		}),
 		refresh: builder.query<LoginResponse, null>({
 			query: () => ({
 				url: '/auth/refresh',
@@ -46,4 +53,4 @@ export const AuthApi = createApi({
 	}),
 });
 
-export const { useLoginMutation, useRegisterMutation, useRefreshQuery, useLogoutMutation } = AuthApi;
+export const { useLoginMutation, useRegisterMutation, useRefreshQuery, useLogoutMutation, useUpdateMutation } = AuthApi;
