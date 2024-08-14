@@ -33,7 +33,7 @@ export const DropFilesWidget: FC<DropFilesWidgetProps> = ({ filesRefetch, classN
 		if (!e.dataTransfer) return;
 		const uploadedFiles = e.dataTransfer.files;
 		const formData = new FormData();
-		for (const file of uploadedFiles) formData.append('files', file);
+		for (const file of uploadedFiles) formData.append('files', file, encodeURI(file.name));
 		formData.append('uploadPath', decodeURI(window.location.pathname.split('/').slice(2).join('/')));
 		addFile(formData);
 	};

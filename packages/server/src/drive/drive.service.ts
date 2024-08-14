@@ -36,12 +36,14 @@ export class DriveService {
 		if (user.usedSpace + totalSize > user.totalSpace) throw new BadRequestException('У Вас недостаточно места.');
 		if (!this.isValidPath(uploadPath)) throw new BadRequestException('Некорректный путь загрузки файлов.');
 		files.forEach(file => {
-			const path = join(fullPath, file.originalname);
+			const path = join(fullPath, decodeURI(file.originalname));
 			if (this.filesService.isExist(path))
-				throw new BadRequestException(`Файл по пути "${join(uploadPath, file.originalname)}" уже существует.`);
+				throw new BadRequestException(
+					`Файл по пути "${join(uploadPath, decodeURI(file.originalname))}" уже существует.`,
+				);
 		});
 		files.forEach(file => {
-			this.filesService.createFile(fullPath, file.originalname, file);
+			this.filesService.createFile(fullPath, decodeURI(file.originalname), file);
 		});
 		return this.recalculateSpace(user);
 	}

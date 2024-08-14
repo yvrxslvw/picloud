@@ -25,7 +25,7 @@ export const AddFileButton: FC<AddFileButtonProps> = ({ filesRefetch }) => {
 		const uploadedFiles = e.target.files;
 		if (!uploadedFiles) return false;
 		const formData = new FormData();
-		for (const file of uploadedFiles) formData.append('files', file);
+		for (const file of uploadedFiles) formData.append('files', file, encodeURI(file.name));
 		formData.append('uploadPath', path);
 		addFile(formData);
 		return true;

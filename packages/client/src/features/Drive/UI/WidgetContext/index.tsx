@@ -29,7 +29,7 @@ export const WidgetContext: FC<WidgetContextProps> = ({ widgetContextRef, filesR
 		const files = e.target.files;
 		if (!files) return false;
 		const formData = new FormData();
-		for (const file of files) formData.append('files', file);
+		for (const file of files) formData.append('files', file, encodeURI(file.name));
 		formData.append('uploadPath', path);
 		addFile(formData);
 		return true;
