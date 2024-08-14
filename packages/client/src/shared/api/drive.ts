@@ -1,5 +1,5 @@
 import { createApi } from '@reduxjs/toolkit/query/react';
-import { IFile } from 'shared/models';
+import { IFile, IUser } from 'shared/models';
 import { baseQuery } from './baseQuery';
 
 export const DriveApi = createApi({
@@ -13,7 +13,14 @@ export const DriveApi = createApi({
 				method: 'GET',
 			}),
 		}),
+		addFiles: builder.mutation<IUser, FormData>({
+			query: body => ({
+				url: '/drive',
+				method: 'POST',
+				body,
+			}),
+		}),
 	}),
 });
 
-export const { useReadQuery } = DriveApi;
+export const { useReadQuery, useAddFilesMutation } = DriveApi;

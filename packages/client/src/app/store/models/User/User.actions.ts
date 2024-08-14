@@ -1,6 +1,7 @@
 import { PayloadAction } from '@reduxjs/toolkit';
 import { LoginResponse } from 'shared/api';
 import { UserState } from './User.slice';
+import { IUser } from 'shared/models';
 
 type State = UserState;
 
@@ -23,4 +24,8 @@ export const logout = (state: State) => {
 		roles: [],
 	};
 	window.localStorage.removeItem('accessToken');
+};
+
+export const update = (state: State, action: PayloadAction<IUser>) => {
+	state.userInfo = action.payload;
 };

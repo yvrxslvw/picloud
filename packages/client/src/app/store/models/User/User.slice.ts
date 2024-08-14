@@ -1,6 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit';
 import { IUser } from 'shared/models';
-import { login, logout } from './User.actions';
+import { login, logout, update } from './User.actions';
 
 export interface UserState {
 	isLogged: boolean;
@@ -27,5 +27,6 @@ export const UserSlice = createSlice({
 	reducers: {
 		login,
 		logout,
+		update,
 	},
 });

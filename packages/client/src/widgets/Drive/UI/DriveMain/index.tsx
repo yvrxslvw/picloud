@@ -1,11 +1,12 @@
 import { FC, HTMLAttributes, useEffect, useState } from 'react';
 import cn from 'classnames';
+import { v4 as uuidv4 } from 'uuid';
 import { Table } from 'shared/UI';
-import { AddFileButton, FileContext, FileFeature, WidgetContext } from 'features/Drive';
-import cl from './style.module.scss';
-import { useContextMenu } from 'widgets/Drive/lib';
-import { useReadQuery } from 'shared/api';
 import { IFile } from 'shared/models';
+import { useReadQuery } from 'shared/api';
+import { AddFileButton, FileContext, FileFeature, WidgetContext } from 'features/Drive';
+import { useContextMenu } from 'widgets/Drive/lib';
+import cl from './style.module.scss';
 
 interface DriveMainWidgetProps extends HTMLAttributes<HTMLDivElement> {
 	path: string;
@@ -15,7 +16,7 @@ export const DriveMainWidget: FC<DriveMainWidgetProps> = ({ path, className, ...
 	const crumbs = decodeURI(path).split('/').slice(2).join('/');
 	const { widgetRef, widgetContextRef, fileContextRef, setSelectedFile, selectedFile } = useContextMenu();
 	const [files, setFiles] = useState<IFile[]>([]);
-	const { data } = useReadQuery(crumbs);
+	const { data, refetch } = useReadQuery(crumbs);
 
 	useEffect(() => {
 		if (data) {
@@ -42,14 +43,14 @@ export const DriveMainWidget: FC<DriveMainWidgetProps> = ({ path, className, ...
 							widgetRef={widgetContextRef}
 							contextRef={fileContextRef}
 							setSelectedFile={setSelectedFile}
-							key={new Date(file.modifyTime).getTime()}
+							key={uuidv4()}
 						/>
 					))}
 				</tbody>
 			</Table>
 
-			<AddFileButton />
-			<WidgetContext widgetContextRef={widgetContextRef} />
+			<AddFileButton filesRefetch={refetch} />
+			<WidgetContext widgetContextRef={widgetContextRef} filesRefetch={refetch} />
 			<FileContext fileContextRef={fileContextRef} selectedFile={selectedFile} />
 		</div>
 	);
