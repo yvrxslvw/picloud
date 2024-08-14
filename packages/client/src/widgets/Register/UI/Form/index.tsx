@@ -6,19 +6,19 @@ import cl from './style.module.scss';
 interface RegisterFormWidgetProps {}
 
 export const RegisterFormWidget: FC<RegisterFormWidgetProps> = () => {
-	const [login, setLogin] = useState('');
-	const [password, setPassword] = useState('');
-	const [passwordConfirm, setPasswordConfirm] = useState('');
+	const [data, setData] = useState({
+		login: '',
+		password: '',
+		passwordConfirm: '',
+	});
 
 	return (
 		<div className={cl.RegisterForm}>
 			<RegisterWindow
-				loginInput={<LoginInput login={login} setLogin={setLogin} />}
-				passwordInput={<PasswordInput password={password} setPassword={setPassword} />}
-				passwordConfirmInput={
-					<PasswordConfirmInput passwordConfirm={passwordConfirm} setPasswordConfirm={setPasswordConfirm} />
-				}
-				registerButton={<RegisterButton login={login} password={password} passwordConfirm={passwordConfirm} />}
+				loginInput={<LoginInput data={data} setData={setData} />}
+				passwordInput={<PasswordInput data={data} setData={setData} />}
+				passwordConfirmInput={<PasswordConfirmInput data={data} setData={setData} />}
+				registerButton={<RegisterButton data={data} />}
 			/>
 		</div>
 	);

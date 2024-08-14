@@ -7,6 +7,7 @@ import { useAppSelector } from 'shared/hooks';
 import { convertFileSize } from 'shared/utils';
 import { ProfileImageDropdown } from 'features/HeaderAccount';
 import cl from './style.module.scss';
+import { Images } from 'shared/images';
 
 interface LayoutProps {}
 
@@ -23,7 +24,11 @@ export const Layout: FC<LayoutProps> = () => {
 				usedSpacePercentage={usedSpacePercentage}
 				totalSpace={convertFileSize(userInfo.totalSpace)}
 				isNotEnoughSpace={usedSpacePercentage >= 80}
-				profileImageDropdown={<ProfileImageDropdown imageLink={`${API_URL}/images/${userInfo.profileImage}`} />}
+				profileImageDropdown={
+					<ProfileImageDropdown
+						imageLink={userInfo.profileImage ? `${API_URL}/images/${userInfo.profileImage}` : Images.chick}
+					/>
+				}
 			/>
 			<main>
 				<Outlet />

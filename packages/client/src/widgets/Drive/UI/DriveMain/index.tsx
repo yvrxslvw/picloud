@@ -16,13 +16,10 @@ export const DriveMainWidget: FC<DriveMainWidgetProps> = ({ path, className, ...
 	const crumbs = decodeURI(path).split('/').slice(2).join('/');
 	const { widgetRef, widgetContextRef, fileContextRef, setSelectedFile, selectedFile } = useContextMenu();
 	const [files, setFiles] = useState<IFile[]>([]);
-	const { data, refetch } = useReadQuery(crumbs);
+	const { data, refetch, isFetching } = useReadQuery(crumbs, { refetchOnMountOrArgChange: true });
 
 	useEffect(() => {
-		if (data) {
-			setFiles(data);
-			setFiles(prev => prev.toSorted((a, b) => +a.isFolder + +b.isFolder));
-		}
+		if (data) setFiles(data.toSorted((a, b) => +a.isFolder + +b.isFolder));
 	}, [data]);
 
 	return (
@@ -37,15 +34,16 @@ export const DriveMainWidget: FC<DriveMainWidgetProps> = ({ path, className, ...
 					</tr>
 				</thead>
 				<tbody>
-					{files.map(file => (
-						<FileFeature
-							file={file}
-							widgetRef={widgetContextRef}
-							contextRef={fileContextRef}
-							setSelectedFile={setSelectedFile}
-							key={uuidv4()}
-						/>
-					))}
+					{!isFetching &&
+						files.map(file => (
+							<FileFeature
+								file={file}
+								widgetRef={widgetContextRef}
+								contextRef={fileContextRef}
+								setSelectedFile={setSelectedFile}
+								key={uuidv4()}
+							/>
+						))}
 				</tbody>
 			</Table>
 

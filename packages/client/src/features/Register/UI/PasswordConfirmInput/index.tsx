@@ -2,14 +2,14 @@ import { ChangeEvent, Dispatch, FC, SetStateAction } from 'react';
 import { Input } from 'shared/UI';
 
 interface PasswordConfirmInputProps {
-	passwordConfirm: string;
-	setPasswordConfirm: Dispatch<SetStateAction<string>>;
+	data: { login: string; password: string; passwordConfirm: string };
+	setData: Dispatch<SetStateAction<{ login: string; password: string; passwordConfirm: string }>>;
 }
 
-export const PasswordConfirmInput: FC<PasswordConfirmInputProps> = ({ passwordConfirm, setPasswordConfirm }) => {
+export const PasswordConfirmInput: FC<PasswordConfirmInputProps> = ({ data, setData }) => {
 	const onChangeHandler = (e: ChangeEvent<HTMLInputElement>) => {
-		const value = e.target.value;
-		setPasswordConfirm(value);
+		const passwordConfirm = e.target.value;
+		setData({ ...data, passwordConfirm });
 	};
 
 	return (
@@ -17,7 +17,7 @@ export const PasswordConfirmInput: FC<PasswordConfirmInputProps> = ({ passwordCo
 			label='Подтверждение пароля'
 			placeholder='Повторите придуманный пароль'
 			type='password'
-			value={passwordConfirm}
+			value={data.passwordConfirm}
 			onChange={onChangeHandler}
 		/>
 	);
