@@ -20,7 +20,16 @@ export const DriveApi = createApi({
 				body,
 			}),
 		}),
+		deleteFiles: builder.mutation<IUser, string[]>({
+			query: paths => ({
+				url: '/drive',
+				method: 'DELETE',
+				body: {
+					paths,
+				},
+			}),
+		}),
 	}),
 });
 
-export const { useReadQuery, useAddFilesMutation } = DriveApi;
+export const { useReadQuery, useAddFilesMutation, useDeleteFilesMutation } = DriveApi;

@@ -51,7 +51,7 @@ export const DriveMainWidget: FC<DriveMainWidgetProps> = ({ path, className, ...
 
 			<AddFileButton filesRefetch={refetch} />
 			<WidgetContext widgetContextRef={widgetContextRef} filesRefetch={refetch} />
-			<FileContext fileContextRef={fileContextRef} selectedFile={selectedFile} />
+			<FileContext fileContextRef={fileContextRef} selectedFile={selectedFile} filesRefetch={refetch} />
 		</div>
 	);
 };
