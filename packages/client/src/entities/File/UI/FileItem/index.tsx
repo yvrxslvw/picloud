@@ -3,7 +3,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faFile, faFolder } from '@fortawesome/free-solid-svg-icons';
 import cn from 'classnames';
 import { IFile } from 'shared/models';
-import { formatDate } from 'shared/utils';
+import { convertFileSize, formatDate } from 'shared/utils';
 import cl from './style.module.scss';
 
 interface FileItemProps extends HTMLAttributes<HTMLTableRowElement>, RefAttributes<HTMLTableRowElement> {
@@ -19,7 +19,7 @@ export const FileItem: FC<FileItemProps> = forwardRef(
 				</td>
 				<td>{file.name}</td>
 				<td>{formatDate(file.modifyTime)}</td>
-				<td>{file.isFolder ? '-' : file.size.toFixed(2) + ' ГБ'}</td>
+				<td>{file.isFolder ? '-' : convertFileSize(file.size) + ' ГБ'}</td>
 			</tr>
 		);
 	},

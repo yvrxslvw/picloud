@@ -9,7 +9,7 @@ export const DrivePage: FC = () => {
 	return (
 		<div className={cl.DrivePage}>
 			<BreadcrumbsWidget path={location.pathname} />
-			<DriveMainWidget />
+			<DriveMainWidget path={location.pathname} />
 			<DropFilesWidget />
 		</div>
 	);
