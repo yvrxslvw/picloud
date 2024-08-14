@@ -1,8 +1,8 @@
-import { ChangeEvent, FC, RefObject, useEffect } from 'react';
+import { ChangeEvent, Dispatch, FC, RefObject, SetStateAction, useEffect } from 'react';
 import { Context, FileLoader } from 'shared/UI';
 import { usePopup } from 'entities/Popup';
 import cl from './style.module.scss';
-import { useAddFilesMutation, useCreateFolderMutation } from 'shared/api';
+import { useAddFilesMutation } from 'shared/api';
 import { useLocation } from 'react-router-dom';
 import { useAppDispatch } from 'shared/hooks';
 import { UserSlice } from 'app/store';
@@ -11,19 +11,18 @@ import { isServerError } from 'shared/utils';
 interface WidgetContextProps {
 	widgetContextRef: RefObject<HTMLUListElement>;
 	filesRefetch: () => void;
+	showCreateFolderModal: Dispatch<SetStateAction<boolean>>;
 }
 
-export const WidgetContext: FC<WidgetContextProps> = ({ widgetContextRef, filesRefetch }) => {
+export const WidgetContext: FC<WidgetContextProps> = ({ widgetContextRef, filesRefetch, showCreateFolderModal }) => {
 	const { createPopup } = usePopup();
 	const [addFile, { data: addFileData, error: addFileError }] = useAddFilesMutation();
-	const [createFolder, { data: createFolderData, error: createFolderError }] = useCreateFolderMutation();
 	const path = decodeURI(useLocation().pathname).split('/').slice(2).join('/');
 	const { update } = UserSlice.actions;
 	const dispatch = useAppDispatch();
 
 	const onCreateFolderHandler = () => {
-		const folderName = 'Тут я сделаю имя потом';
-		createFolder(path ? `${path}/${folderName}` : folderName);
+		showCreateFolderModal(true);
 	};
 
 	const onChangeHandler = (e: ChangeEvent<HTMLInputElement>): boolean => {
@@ -40,23 +39,13 @@ export const WidgetContext: FC<WidgetContextProps> = ({ widgetContextRef, filesR
 		if (addFileData) {
 			dispatch(update(addFileData));
 			filesRefetch();
+			createPopup('Файл успешно загружен.');
 		}
 	}, [addFileData]);
 
 	useEffect(() => {
 		if (isServerError(addFileError)) createPopup(addFileError.data.message);
 	}, [addFileError]);
-
-	useEffect(() => {
-		if (createFolderData) {
-			dispatch(update(createFolderData));
-			filesRefetch();
-		}
-	}, [createFolderData]);
-
-	useEffect(() => {
-		if (isServerError(createFolderError)) createPopup(createFolderError.data.message);
-	}, [createFolderError]);
 
 	return (
 		<Context.Menu className={cl.WidgetContext} ref={widgetContextRef}>

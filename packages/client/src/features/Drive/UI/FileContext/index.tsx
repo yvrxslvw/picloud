@@ -35,6 +35,7 @@ export const FileContext: FC<FileContextProps> = ({ fileContextRef, selectedFile
 		if (data) {
 			dispatch(update(data));
 			filesRefetch();
+			createPopup(selectedFile?.isFolder ? 'Папка успешно удалена.' : 'Файл успешно удалён.');
 		}
 	}, [data]);
 

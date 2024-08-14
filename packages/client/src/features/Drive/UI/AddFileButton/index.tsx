@@ -35,6 +35,7 @@ export const AddFileButton: FC<AddFileButtonProps> = ({ filesRefetch }) => {
 		if (data) {
 			dispatch(update(data));
 			filesRefetch();
+			createPopup('Файл успешно загружен.');
 		}
 	}, [data]);
 
